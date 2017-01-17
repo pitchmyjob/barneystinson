@@ -5,13 +5,10 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.behaviors import Localisation
-# from apps.core.utils import generate_upload_to
 
 
 class Job(Localisation, TimeStampedModel, models.Model):
     pro = models.ForeignKey('pro.Pro', blank=True, null=True, verbose_name=_('pro'))
-    # company = models.CharField(_('raison sociale'), max_length=250)
-    # logo = models.ImageField(_('logo'), upload_to=generate_upload_to, blank=True)
     title = models.CharField(_('titre de l\'offre'), max_length=250)
     contrat_types = models.ManyToManyField('data.ContractType', verbose_name=_('types de contrat'))
     experiences = models.ManyToManyField('data.Experience', verbose_name=_('expériences'))
