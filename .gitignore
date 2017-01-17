@@ -128,3 +128,13 @@ sftp-config.json
 # --- OS X ---
 
 .DS_Store
+
+
+
+
+# --- AWS ---
+
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+reports/
