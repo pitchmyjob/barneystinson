@@ -8,7 +8,7 @@ ALLOWED_HOSTS = ['*']
 AUTH_PASSWORD_VALIDATORS = []
 
 INSTALLED_APPS += [
-	# Thirds apps
+    # Thirds apps
     'django_extensions',
 ]
 

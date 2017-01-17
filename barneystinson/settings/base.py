@@ -68,6 +68,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'storages',
     # Own apps
+    'apps.core.apps.CoreConfig',
+    'apps.authentication.apps.AuthenticationConfig',
+    'apps.pro.apps.ProConfig',
+    'apps.data.apps.DataConfig',
+    'apps.job.apps.JobConfig',
 ]
 
 MIDDLEWARE = [
@@ -157,3 +162,5 @@ MEDIAFILES_LOCATION = 'media'
 MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 
 MEDIA_ROOT = BASE_DIR.child('media')
+
+AUTH_USER_MODEL = 'authentication.User'
