@@ -18,8 +18,7 @@ class Job(Localisation, TimeStampedModel, models.Model):
     description = models.TextField(_('description'))
     view_counter = models.PositiveIntegerField(_('nombre de vue'), default=0)
     last_payment = models.DateTimeField(_('dernier paiement'), null=True, blank=True)
-    is_complete = models.BooleanField(_('est complet'), default=False)
-    is_active = models.BooleanField(_('est actif'), default=False)
+    is_active = models.BooleanField(_('est actif'), default=True)
 
     class Meta:
         verbose_name = _('offre')

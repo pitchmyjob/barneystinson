@@ -172,3 +172,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     )
 }
+
+DAYS_JOB = 30
