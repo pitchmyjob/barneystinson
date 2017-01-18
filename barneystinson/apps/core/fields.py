@@ -10,4 +10,4 @@ class ImageField(models.ImageField):
         model_field_name = str(self.name)
         filename, extension = os.path.splitext(filename)
         filename = str(uuid.uuid4()) + str(extension)
-        return '{}/{}/{}/{}'.format(model_name, model_field_name, instance.id, filename)
+        return '{}/{}/{}/{}'.format(model_name, instance.id, model_field_name, filename)
