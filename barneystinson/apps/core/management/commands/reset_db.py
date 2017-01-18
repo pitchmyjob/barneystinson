@@ -3,7 +3,7 @@ import time
 import boto3
 from botocore.exceptions import ClientError
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
@@ -21,7 +21,7 @@ class Command(BaseCommand):
 
     def get_describe_db_instance(self):
         response = self.client.describe_db_instances(DBInstanceIdentifier=self.db_instance_identifier)
-
+        # Commentaire loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong
         db_instances = response['DBInstances']
         if len(db_instances) != 1:
             raise Exception('More than one DB instance returned')

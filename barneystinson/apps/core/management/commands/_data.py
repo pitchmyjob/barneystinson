@@ -25,7 +25,7 @@ INDUSTRIES = [
     'Fonction publique',
     'Hôtellerie / Restauration',
     'Immobilier',
-    'import / Export',
+    'Import / Export',
     'Informatique',
     'Métiers du web',
     'Mode',
@@ -78,4 +78,14 @@ STUDY_LEVELS = [
     'Bac +4 (Master 1)',
     'Bac +5 (Master 2)',
     'Bac +7 (Doctorat)',
+]
+
+GROUPS = [
+    'Pro',
+    'Member',
+]
+
+ADMINS = [
+    {'username': 'yannis', 'email': 'tannier.yannis@gmail.com', 'password': '123456'},
+    {'username': 'maximilien', 'email': 'raulic.maximilien@gmail.com', 'password': '123456'},
 ]
