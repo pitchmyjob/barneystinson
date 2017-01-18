@@ -2,12 +2,12 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from apps.core.utils import generate_upload_to
+from apps.core.fields import ImageField
 
 
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
-    image = models.ImageField(_('photo'), upload_to=generate_upload_to, blank=True)
+    photo = ImageField(_('photo'), blank=True, default='user/photo/default.jpg')
     pro = models.ForeignKey('pro.Pro', blank=True, null=True, verbose_name=_('pro'))
 
     USERNAME_FIELD = 'email'

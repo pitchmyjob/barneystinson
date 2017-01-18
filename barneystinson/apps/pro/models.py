@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.behaviors import Localisation
-from apps.core.utils import generate_upload_to
+from apps.core.fields import ImageField
 
 
 class Pro(Localisation, models.Model):
@@ -13,8 +13,7 @@ class Pro(Localisation, models.Model):
     industry = models.ForeignKey('data.Industry', default=1, verbose_name=_('secteur d\'activité'))
     employes = models.ForeignKey('data.Employee', null=True, verbose_name=_('nombre d\'employés'))
     ca = models.CharField(_('chiffre d\'affaire'), max_length=250, blank=True)
-    video_url = models.CharField(_('vidéo'), max_length=250, blank=True)
-    image = models.ImageField(_('logo'), upload_to=generate_upload_to, default='pro/default.jpg')
+    logo = ImageField(_('logo'), blank=True, default='pro/logo/default.jpg')
 
     def __str__(self):
         return self.company
