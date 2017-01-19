@@ -58,7 +58,7 @@ nano ~/.virtualenvs/barneystinson/bin/postactivate
 Paste the content bellow :
 
 ```
-!/bin/zsh
+!/bin/zsh (ou #!/bin/bash)
 
 PROJECT_PATH="~/Developpement/barneystinson/barneystinson" # Change it to match your installation
 
