@@ -37,6 +37,12 @@ export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv # Change the path 
 source /usr/local/bin/virtualenvwrapper.sh # Change the path to match your installation
 ```
 
+Execute profile
+
+```
+source ~/.profile
+```
+
 ## Create `barneystinson` virtualenv
 
 ```
