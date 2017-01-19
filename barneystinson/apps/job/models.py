@@ -1,13 +1,23 @@
+import datetime
+
 from model_utils.models import TimeStampedModel
 
+from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.behaviors import Localisation
 
+from .managers import JobManager
+
 
 class Job(Localisation, TimeStampedModel, models.Model):
+    STATE_PENDING_LABEL = _('En attente')
+    STATE_VISIBLE_LABEL = _('Visible')
+    STATE_EXPIRED_LABEL = _('Expirée')
+
     pro = models.ForeignKey('pro.Pro', blank=True, null=True, verbose_name=_('pro'))
     title = models.CharField(_('titre de l\'offre'), max_length=250)
     contract_types = models.ManyToManyField('data.ContractType', verbose_name=_('types de contrat'))
@@ -20,12 +30,24 @@ class Job(Localisation, TimeStampedModel, models.Model):
     last_payment = models.DateTimeField(_('dernier paiement'), null=True, blank=True)
     is_active = models.BooleanField(_('est actif'), default=True)
 
+    objects = JobManager
+
     class Meta:
         verbose_name = _('offre')
         verbose_name_plural = _('offres')
 
     def __str__(self):
         return self.title
+
+    def get_state(self):
+        date = timezone.now() - datetime.timedelta(days=settings.DAYS_JOB)
+        if self.last_payment is None:
+            return self.STATE_PENDING_LABEL
+        elif self.last_payment >= date:
+            return self.STATE_VISIBLE_LABEL
+        else:
+            return self.STATE_EXPIRED_LABEL
+    get_state.short_description = _('État')
 
 
 class JobQuestion(models.Model):
