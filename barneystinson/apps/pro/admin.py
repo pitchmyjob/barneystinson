@@ -5,6 +5,7 @@ from .models import Pro
 
 @admin.register(Pro)
 class ProAdmin(admin.ModelAdmin):
-    fields = ('company', 'logo', 'industry', 'employes', 'ca', 'phone', 'website', 'description')
-    list_display = ('company', 'industry', 'employes', 'ca', 'phone', 'website')
+    fields = ('company', 'logo', 'industry', 'employes', 'ca', 'phone', 'website', 'description', 'is_active')
+    list_display = ('company', 'industry', 'employes', 'ca', 'phone', 'website', 'is_active')
+    list_filter = ('is_active',)
     search_fields = ('company', 'description')
