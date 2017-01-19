@@ -1,13 +1,13 @@
 from rest_framework.viewsets import ModelViewSet
 
-from apps.core.api.mixins import IsAuthenticated
+from apps.core.api.mixins import IsAuthenticatedMixin, IsActiveDestroyMixin
 
 from ..models import Job, JobQuestion
 from .filters import JobFilter
 from .serializers import JobSerializer, JobQuestionSerializer
 
 
-class JobViewSet(IsAuthenticated, ModelViewSet):
+class JobViewSet(IsAuthenticatedMixin, IsActiveDestroyMixin, ModelViewSet):
     serializer_class = JobSerializer
     filter_class = JobFilter
     search_fields = ('title', 'description')
@@ -23,7 +23,7 @@ class JobViewSet(IsAuthenticated, ModelViewSet):
         serializer.save(pro=self.request.user.pro)
 
 
-class JobQuestionViewSet(IsAuthenticated, ModelViewSet):
+class JobQuestionViewSet(IsAuthenticatedMixin, ModelViewSet):
     serializer_class = JobQuestionSerializer
     filter_fields = ('job',)
 
