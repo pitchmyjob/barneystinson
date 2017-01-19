@@ -14,6 +14,7 @@ class Pro(Localisation, models.Model):
     employes = models.ForeignKey('data.Employee', null=True, verbose_name=_('nombre d\'employés'))
     ca = models.CharField(_('chiffre d\'affaire'), max_length=250, blank=True)
     logo = ImageField(_('logo'), blank=True, default='pro/logo/default.jpg')
+    is_active = models.BooleanField(_('est actif'), default=True)
 
     def __str__(self):
         return self.company
