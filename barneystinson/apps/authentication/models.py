@@ -6,12 +6,15 @@ from apps.core.fields import ImageField
 
 
 class User(AbstractUser):
+    username = False
     email = models.EmailField(_('email address'), unique=True)
     photo = ImageField(_('photo'), blank=True, default='user/photo/default.jpg')
+    phone = models.CharField(_('numéro de téléphone'), max_length=250, default='')
+    position = models.CharField(_('poste occupé'), max_length=250, default='')
     pro = models.ForeignKey('pro.Pro', blank=True, null=True, verbose_name=_('pro'))
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = _('user')

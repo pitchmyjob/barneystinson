@@ -51,8 +51,8 @@ class Job(Localisation, TimeStampedModel, models.Model):
 
 
 class JobQuestion(models.Model):
-    job = models.ForeignKey('job.Job', related_name='questions', null=True, blank=True)
-    question = models.CharField(max_length=250)
+    job = models.ForeignKey('job.Job', related_name='questions', verbose_name=_('offre'))
+    question = models.CharField(_('question'), max_length=250)
     order = models.PositiveSmallIntegerField(_('ordre'), default=1)
 
     class Meta:
