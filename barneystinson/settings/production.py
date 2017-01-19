@@ -3,7 +3,7 @@ from .base import *  # noqa
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['<to_define>']
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {
@@ -15,6 +15,6 @@ DATABASES = {
     }
 }
 
-AWS_STORAGE_BUCKET_NAME = '<to_define>'
+# AWS_STORAGE_BUCKET_NAME = '<to_define>'
 
-EMAIL_BACKEND = '<to_define>'
+# EMAIL_BACKEND = '<to_define>'

@@ -42,12 +42,12 @@ SECRET_KEY = get_env_variable('DJANGO_SECRET_KEY')
 DEBUG = True
 
 ADMINS = [
-    ('<to_define>', '<to_define>'),
+    ('Tannier Yannis', 'tannier.yannis@gmail.com'),
 ]
 
 MANAGERS = ADMINS
 
-DEFAULT_FROM_EMAIL = '<to_define>'
+DEFAULT_FROM_EMAIL = 'contact@pitchmyjob.com'
 
 SITE_ID = 1
 
