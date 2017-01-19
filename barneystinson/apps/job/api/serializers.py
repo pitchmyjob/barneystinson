@@ -2,8 +2,6 @@ from rest_framework import serializers
 
 from django.utils.translation import ugettext as _
 
-from apps.pro.models import Pro
-
 from ..models import Job, JobQuestion
 
 
