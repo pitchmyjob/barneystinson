@@ -34,5 +34,6 @@ class ProRegisterAPIView(CreateAPIView):
     def perform_create(self, serializer):
         data = serializer.data
         pro = Pro.objects.create(**data['pro'])
-        user = User.objects.create(pro=pro, **data['user'])
+        user = User.objects.create_user(username=data['user']['email'], pro=pro, **data['user'])
+        del serializer.data['user']['password']
         serializer.data['user']['token'] = user.auth_token.key

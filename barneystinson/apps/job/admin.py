@@ -14,6 +14,7 @@ class JobQuestionInlineAdmin(admin.TabularInline):
 class JobAdmin(admin.ModelAdmin):
     fields = ('pro', 'title', 'contract_types', 'experiences', 'study_levels', 'salary', 'skills', 'description',
               'view_counter', 'last_payment', 'is_active')
+    readonly_fields = ('view_counter', 'last_payment')
     filter_horizontal = ('contract_types', 'experiences', 'study_levels')
     list_display = ('pro', 'title', 'is_active', 'get_state', 'last_payment')
     list_filter = (StateListFilter, 'is_active', 'contract_types', 'experiences', 'study_levels')

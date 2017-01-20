@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
+    url(r'^api/', include('apps.applicant.urls')),
     url(r'^api/', include('apps.authentication.urls')),
     url(r'^api/', include('apps.data.urls')),
     url(r'^api/', include('apps.job.urls')),
