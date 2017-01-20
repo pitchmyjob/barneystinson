@@ -18,3 +18,7 @@ DATABASES = {
 # AWS_STORAGE_BUCKET_NAME = '<to_define>'
 
 # EMAIL_BACKEND = '<to_define>'
+
+REST_FRAMEWORK_DOCS = {
+    'HIDE_DOCS': True
+}
