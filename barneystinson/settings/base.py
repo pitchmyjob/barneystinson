@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'storages',
     # Own apps
     'apps.core.apps.CoreConfig',
+    'apps.applicant.apps.ApplicantConfig',
     'apps.authentication.apps.AuthenticationConfig',
     'apps.pro.apps.ProConfig',
     'apps.data.apps.DataConfig',

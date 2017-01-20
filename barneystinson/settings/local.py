@@ -10,6 +10,7 @@ AUTH_PASSWORD_VALIDATORS = []
 INSTALLED_APPS += [
     # Thirds apps
     'django_extensions',
+    'rest_framework_docs',
 ]
 
 DATABASES = {
