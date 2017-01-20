@@ -1,8 +1,6 @@
 from rest_framework import mixins
-from rest_framework.generics import CreateAPIView
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from apps.authentication.models import User
 from apps.core.api.mixins import IsAuthenticatedMixin
 
 from ..models import Applicant, Experience, Formation, Skill, Language, Interest

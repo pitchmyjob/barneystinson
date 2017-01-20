@@ -1,3 +1,6 @@
+from rest_framework.compat import unicode_to_repr
+
+
 class CurrentApplicantDefault(object):
     def set_context(self, serializer_field):
         self.applicant = serializer_field.context['request'].user.applicant

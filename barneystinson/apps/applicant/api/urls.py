@@ -1,7 +1,5 @@
 from rest_framework.routers import DefaultRouter
 
-from django.conf.urls import url
-
 from .views import (ApplicantViewSet, ExperienceViewSet, FormationViewSet, SkillViewSet, LanguageViewSet,
                     InterestViewSet)
 

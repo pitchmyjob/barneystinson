@@ -15,9 +15,9 @@ class Applicant(Localisation, models.Model):
     description = models.TextField(_('description'), blank=True)
     url = models.CharField(_('lien'), max_length=250, blank=True)
     wanted_skills = ArrayField(models.CharField(_('skill'), max_length=250), null=True, blank=True,
-                                                verbose_name=_('compétences recherchées'))
+                               verbose_name=_('compétences recherchées'))
     wanted_jobs = ArrayField(models.CharField(_('job'), max_length=250), null=True, blank=True,
-                                              verbose_name=_('postes recherchés'))
+                             verbose_name=_('postes recherchés'))
     wanted_contracts = models.ManyToManyField('data.ContractType', blank=True,
                                               verbose_name=_('types de contrat recherchés'))
 

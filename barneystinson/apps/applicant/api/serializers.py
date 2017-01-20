@@ -20,6 +20,7 @@ class ExperienceSerializer(serializers.ModelSerializer):
 
 class FormationSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentApplicantDefault())
+
     class Meta:
         model = Formation
         fields = '__all__'
@@ -27,6 +28,7 @@ class FormationSerializer(serializers.ModelSerializer):
 
 class SkillSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentApplicantDefault())
+
     class Meta:
         model = Skill
         fields = '__all__'
@@ -34,6 +36,7 @@ class SkillSerializer(serializers.ModelSerializer):
 
 class LanguageSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentApplicantDefault())
+
     class Meta:
         model = Language
         fields = '__all__'
@@ -41,6 +44,7 @@ class LanguageSerializer(serializers.ModelSerializer):
 
 class InterestSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentApplicantDefault())
+
     class Meta:
         model = Interest
         fields = '__all__'
