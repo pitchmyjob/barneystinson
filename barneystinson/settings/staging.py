@@ -12,3 +12,7 @@ DATABASES = {
 }
 
 # AWS_STORAGE_BUCKET_NAME = '<to_define>'
+
+REST_FRAMEWORK_DOCS = {
+    'HIDE_DOCS': False
+}
