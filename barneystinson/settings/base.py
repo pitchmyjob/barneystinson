@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'storages',
+    'rest_framework_docs',
     # Own apps
     'apps.core.apps.CoreConfig',
     'apps.applicant.apps.ApplicantConfig',
