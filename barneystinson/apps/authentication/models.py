@@ -6,7 +6,7 @@ from apps.core.fields import ImageField
 
 
 class User(AbstractUser):
-    username = False
+    username = models.CharField(_('username'), max_length=250, blank=True)
     email = models.EmailField(_('email address'), unique=True)
     photo = ImageField(_('photo'), blank=True, default='user/photo/default.jpg')
     phone = models.CharField(_('numéro de téléphone'), max_length=250, default='')
