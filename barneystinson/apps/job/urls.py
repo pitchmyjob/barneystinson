@@ -1,4 +1,1 @@
-from .api.urls import router
-
-
-urlpatterns = router.urls
+from .api.urls import urlpatterns  # noqa

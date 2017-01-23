@@ -9,3 +9,5 @@ router.register('employees', EmployeeViewSet)
 router.register('contracttypes', ContractTypeViewSet)
 router.register('experiences', ExperienceViewSet)
 router.register('studylevels', StudyLevelViewSet)
+
+urlpatterns = router.urls
