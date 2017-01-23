@@ -1,10 +1,10 @@
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import SimpleRouter
 
 from .views import (ApplicantViewSet, ExperienceViewSet, FormationViewSet, SkillViewSet, LanguageViewSet,
                     InterestViewSet)
 
 
-router = DefaultRouter()
+router = SimpleRouter()
 router.register('applicants', ApplicantViewSet, base_name='applicant')
 router.register('experiences', ExperienceViewSet, base_name='experience')
 router.register('formations', FormationViewSet, base_name='formation')

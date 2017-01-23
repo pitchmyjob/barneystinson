@@ -1,9 +1,9 @@
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import SimpleRouter
 
 from .views import JobViewSet, JobQuestionViewSet
 
 
-router = DefaultRouter()
+router = SimpleRouter()
 router.register('jobs', JobViewSet, base_name='job')
 router.register('jobquestions', JobQuestionViewSet, base_name='jobquestion')
 

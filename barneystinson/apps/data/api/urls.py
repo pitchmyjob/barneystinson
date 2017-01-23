@@ -1,9 +1,9 @@
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import SimpleRouter
 
 from .views import IndustryViewSet, EmployeeViewSet, ContractTypeViewSet, ExperienceViewSet, StudyLevelViewSet
 
 
-router = DefaultRouter()
+router = SimpleRouter()
 router.register('industries', IndustryViewSet)
 router.register('employees', EmployeeViewSet)
 router.register('contracttypes', ContractTypeViewSet)
