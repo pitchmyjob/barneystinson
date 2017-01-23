@@ -4,8 +4,8 @@ from .views import AuthRegisterApplicantAPIView, AuthLoginApplicantAPIView, Auth
 
 
 urlpatterns = [
-    url(r'^auth/applicant/register', AuthRegisterApplicantAPIView.as_view()),
-    url(r'^auth/applicant/login', AuthLoginApplicantAPIView.as_view()),
-    url(r'^auth/pro/register', AuthRegisterProAPIView.as_view()),
-    url(r'^auth/pro/login', AuthLoginProAPIView.as_view()),
+    url(r'^auth/applicant/register', AuthRegisterApplicantAPIView.as_view(), name='applicant-register'),
+    url(r'^auth/applicant/login', AuthLoginApplicantAPIView.as_view(), name='applicant-login'),
+    url(r'^auth/pro/register', AuthRegisterProAPIView.as_view(), name='pro-register'),
+    url(r'^auth/pro/login', AuthLoginProAPIView.as_view(), name='pro-login'),
 ]
