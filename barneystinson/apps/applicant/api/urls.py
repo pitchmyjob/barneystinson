@@ -6,7 +6,7 @@ from .views import (ApplicantViewSet, ExperienceViewSet, FormationViewSet, Skill
 
 router = SimpleRouter()
 router.register('applicants', ApplicantViewSet, base_name='applicant')
-router.register('experiences', ExperienceViewSet, base_name='experience')
+router.register('proexperiences', ExperienceViewSet, base_name='proexperience')
 router.register('formations', FormationViewSet, base_name='formation')
 router.register('skills', SkillViewSet, base_name='skill')
 router.register('languages', LanguageViewSet, base_name='language')
