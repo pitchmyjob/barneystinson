@@ -1,16 +1,23 @@
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
+from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 
-from .serializers import AuthProLoginSerializer
+from .mixins import AuthLoginMixin
+from .serializers import UserRegisterApplicantSerializer, UserRegisterProSerializer, AutLoginSerializer
 
 
-class AuthProLoginAPIView(APIView):
-    serializer_class = AuthProLoginSerializer
+class AuthRegisterApplicantAPIView(CreateAPIView):
+    serializer_class = UserRegisterApplicantSerializer
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+
+class AuthLoginApplicantAPIView(AuthLoginMixin, APIView):
+    serializer_class = AutLoginSerializer
+    login_type = 'applicant'
+
+
+class AuthRegisterProAPIView(CreateAPIView):
+    serializer_class = UserRegisterProSerializer
+
+
+class AuthLoginProAPIView(AuthLoginMixin, APIView):
+    serializer_class = AutLoginSerializer
+    login_type = 'pro'

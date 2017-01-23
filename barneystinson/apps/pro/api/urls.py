@@ -1,13 +1,9 @@
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import SimpleRouter
 
-from django.conf.urls import url
-
-from .views import ProViewSet, ProRegisterAPIView
+from .views import ProViewSet
 
 
-router = DefaultRouter()
+router = SimpleRouter()
 router.register('pros', ProViewSet, base_name='pro')
 
-urlpatterns = router.urls + [
-    url(r'^pros/register', ProRegisterAPIView.as_view()),
-]
+urlpatterns = router.urls
