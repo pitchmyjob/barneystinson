@@ -2,7 +2,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.translation import ugettext as _
 
 
 class AuthLoginMixin(object):
@@ -17,5 +16,5 @@ class AuthLoginMixin(object):
 
     def get_serializer_context(self):
         if not self.login_type:
-            raise ImproperlyConfigured(_('"login_type" attribute must be defined'))
+            raise ImproperlyConfigured('"%s" should include a `login_type` attribute.' % self.__class__.__name__)
         return {'login_type': self.login_type}
