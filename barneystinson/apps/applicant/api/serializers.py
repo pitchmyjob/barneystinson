@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from ..models import Applicant, Experience, Formation, Skill, Language, Interest
+from ..models import (Applicant, ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage,
+                      ApplicantInterest)
 from .fields import CurrentApplicantDefault
 
 
@@ -10,41 +11,41 @@ class ApplicantSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ExperienceSerializer(serializers.ModelSerializer):
+class ApplicantExperienceSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentApplicantDefault())
 
     class Meta:
-        model = Experience
+        model = ApplicantExperience
         fields = '__all__'
 
 
-class FormationSerializer(serializers.ModelSerializer):
+class ApplicantEducationSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentApplicantDefault())
 
     class Meta:
-        model = Formation
+        model = ApplicantEducation
         fields = '__all__'
 
 
-class SkillSerializer(serializers.ModelSerializer):
+class ApplicantSkillSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentApplicantDefault())
 
     class Meta:
-        model = Skill
+        model = ApplicantSkill
         fields = '__all__'
 
 
-class LanguageSerializer(serializers.ModelSerializer):
+class ApplicantLanguageSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentApplicantDefault())
 
     class Meta:
-        model = Language
+        model = ApplicantLanguage
         fields = '__all__'
 
 
-class InterestSerializer(serializers.ModelSerializer):
+class ApplicantInterestSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentApplicantDefault())
 
     class Meta:
-        model = Interest
+        model = ApplicantInterest
         fields = '__all__'

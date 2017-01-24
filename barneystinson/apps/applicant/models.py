@@ -29,7 +29,7 @@ class Applicant(Localisation, models.Model):
         return '{} - {}'.format(self.user, self.title)
 
 
-class Experience(ApplicantRelated, StartEndDate, models.Model):
+class ApplicantExperience(ApplicantRelated, StartEndDate, models.Model):
     company = models.CharField(_('raison sociale'), max_length=250)
     position = models.CharField(_('poste'), max_length=250)
     location = models.CharField(_('lieu'), max_length=250, blank=True)
@@ -44,7 +44,7 @@ class Experience(ApplicantRelated, StartEndDate, models.Model):
         return '{} - {}'.format(self.company, self.position)
 
 
-class Formation(ApplicantRelated, StartEndDate, models.Model):
+class ApplicantEducation(ApplicantRelated, StartEndDate, models.Model):
     school = models.CharField(_('établissement'), max_length=250)
     degree = models.CharField(_('formation'), max_length=250)
     description = models.TextField(_('description'), blank=True)
@@ -58,7 +58,7 @@ class Formation(ApplicantRelated, StartEndDate, models.Model):
         return '{} - {}'.format(self.school, self.degree)
 
 
-class Skill(ApplicantRelated, models.Model):
+class ApplicantSkill(ApplicantRelated, models.Model):
     name = models.CharField(_('nom'), max_length=250)
     level = models.PositiveSmallIntegerField(_('niveau'), null=True, blank=True)
 
@@ -70,7 +70,7 @@ class Skill(ApplicantRelated, models.Model):
         return self.name
 
 
-class Language(ApplicantRelated, models.Model):
+class ApplicantLanguage(ApplicantRelated, models.Model):
     name = models.CharField(_('nom'), max_length=250)
     level = models.PositiveSmallIntegerField(_('niveau'), null=True, blank=True)
 
@@ -82,7 +82,7 @@ class Language(ApplicantRelated, models.Model):
         return self.name
 
 
-class Interest(ApplicantRelated, models.Model):
+class ApplicantInterest(ApplicantRelated, models.Model):
     name = models.CharField(_('nom'), max_length=250)
 
     class Meta:

@@ -3,9 +3,10 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from apps.core.api.mixins import IsAuthenticatedMixin
 
-from ..models import Applicant, Experience, Formation, Skill, Language, Interest
-from .serializers import (ApplicantSerializer, ExperienceSerializer, FormationSerializer, SkillSerializer,
-                          LanguageSerializer, InterestSerializer)
+from ..models import (Applicant, ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage,
+                      ApplicantInterest)
+from .serializers import (ApplicantSerializer, ApplicantExperienceSerializer, ApplicantEducationSerializer,
+                          ApplicantSkillSerializer, ApplicantLanguageSerializer, ApplicantInterestSerializer)
 
 
 class ApplicantViewSet(IsAuthenticatedMixin,
@@ -18,36 +19,36 @@ class ApplicantViewSet(IsAuthenticatedMixin,
         return Applicant.objects.filter(user=self.request.user)
 
 
-class ExperienceViewSet(IsAuthenticatedMixin, ModelViewSet):
-    serializer_class = ExperienceSerializer
+class ApplicantExperienceViewSet(IsAuthenticatedMixin, ModelViewSet):
+    serializer_class = ApplicantExperienceSerializer
 
     def get_queryset(self):
-        return Experience.objects.filter(applicant__user=self.request.user)
+        return ApplicantExperience.objects.filter(applicant__user=self.request.user)
 
 
-class FormationViewSet(IsAuthenticatedMixin, ModelViewSet):
-    serializer_class = FormationSerializer
-
-    def get_queryset(self):
-        return Formation.objects.filter(applicant__user=self.request.user)
-
-
-class SkillViewSet(IsAuthenticatedMixin, ModelViewSet):
-    serializer_class = SkillSerializer
+class ApplicantEducationViewSet(IsAuthenticatedMixin, ModelViewSet):
+    serializer_class = ApplicantEducationSerializer
 
     def get_queryset(self):
-        return Skill.objects.filter(applicant__user=self.request.user)
+        return ApplicantEducation.objects.filter(applicant__user=self.request.user)
 
 
-class LanguageViewSet(IsAuthenticatedMixin, ModelViewSet):
-    serializer_class = LanguageSerializer
-
-    def get_queryset(self):
-        return Language.objects.filter(applicant__user=self.request.user)
-
-
-class InterestViewSet(IsAuthenticatedMixin, ModelViewSet):
-    serializer_class = InterestSerializer
+class ApplicantSkillViewSet(IsAuthenticatedMixin, ModelViewSet):
+    serializer_class = ApplicantSkillSerializer
 
     def get_queryset(self):
-        return Interest.objects.filter(applicant__user=self.request.user)
+        return ApplicantSkill.objects.filter(applicant__user=self.request.user)
+
+
+class ApplicantLanguageViewSet(IsAuthenticatedMixin, ModelViewSet):
+    serializer_class = ApplicantLanguageSerializer
+
+    def get_queryset(self):
+        return ApplicantLanguage.objects.filter(applicant__user=self.request.user)
+
+
+class ApplicantInterestViewSet(IsAuthenticatedMixin, ModelViewSet):
+    serializer_class = ApplicantInterestSerializer
+
+    def get_queryset(self):
+        return ApplicantInterest.objects.filter(applicant__user=self.request.user)

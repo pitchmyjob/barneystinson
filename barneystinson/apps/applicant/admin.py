@@ -1,34 +1,35 @@
 from django.contrib import admin
 
-from .models import Applicant, Experience, Formation, Skill, Language, Interest
+from .models import (Applicant, ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage,
+                     ApplicantInterest)
 
 
-class ExperienceInlineAdmin(admin.TabularInline):
-    model = Experience
+class ApplicantExperienceInlineAdmin(admin.TabularInline):
+    model = ApplicantExperience
     fields = ('company', 'position', 'location', 'description')
     extra = 0
 
 
-class FormationInlineAdmin(admin.TabularInline):
-    model = Formation
+class ApplicantEducationInlineAdmin(admin.TabularInline):
+    model = ApplicantEducation
     fields = ('school', 'degree', 'description')
     extra = 0
 
 
-class SkillInlineAdmin(admin.TabularInline):
-    model = Skill
+class ApplicantSkillInlineAdmin(admin.TabularInline):
+    model = ApplicantSkill
     fields = ('name', 'level')
     extra = 0
 
 
-class LanguageInlineAdmin(admin.TabularInline):
-    model = Language
+class ApplicantLanguageInlineAdmin(admin.TabularInline):
+    model = ApplicantLanguage
     fields = ('name', 'level')
     extra = 0
 
 
-class InterestInlineAdmin(admin.TabularInline):
-    model = Interest
+class ApplicantInterestInlineAdmin(admin.TabularInline):
+    model = ApplicantInterest
     fields = ('name',)
     extra = 0
 
@@ -41,7 +42,8 @@ class ApplicantAdmin(admin.ModelAdmin):
     list_display = ('user', 'title')
     list_filter = ('wanted_contracts',)
     search_fields = ('user__email', 'user__first_name', 'user__last_name', 'title', 'wanted_skills', 'wanted_jobs')
-    inlines = [ExperienceInlineAdmin, FormationInlineAdmin, SkillInlineAdmin, LanguageInlineAdmin, InterestInlineAdmin]
+    inlines = [ApplicantExperienceInlineAdmin, ApplicantEducationInlineAdmin, ApplicantSkillInlineAdmin,
+               ApplicantLanguageInlineAdmin, ApplicantInterestInlineAdmin]
 
     def has_add_permission(self, request):
         return False
