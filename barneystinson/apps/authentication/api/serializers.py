@@ -1,3 +1,4 @@
+from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
 from django.contrib.auth import authenticate
@@ -10,11 +11,12 @@ from ..models import User
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
+    photo = Base64ImageField(required=False)
     token = serializers.CharField(source='auth_token.key', read_only=True)
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'first_name', 'last_name', 'token']
+        fields = ['email', 'password', 'first_name', 'last_name', 'photo', 'token']
         extra_kwargs = {
             'password': {'write_only': True},
             'first_name': {'required': True},
@@ -22,7 +24,11 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        return User.objects.create_user(username=validated_data['email'], **validated_data)
+        photo = validated_data.pop('photo', None)
+        user = User.objects.create_user(username=validated_data['email'], **validated_data)
+        user.photo = photo
+        user.save()
+        return user
 
 
 class UserRegisterApplicantSerializer(UserRegisterSerializer):
@@ -33,13 +39,17 @@ class UserRegisterApplicantSerializer(UserRegisterSerializer):
 
 
 class UserRegisterProSerializer(UserRegisterSerializer):
+    logo = Base64ImageField(source='pro.logo', required=False)
     company = serializers.CharField(source='pro.company')
 
     class Meta(UserRegisterSerializer.Meta):
-        fields = UserRegisterSerializer.Meta.fields + ['company']
+        fields = UserRegisterSerializer.Meta.fields + ['logo', 'company']
 
     def create(self, validated_data):
+        logo = validated_data['pro'].pop('logo', None)
         pro = Pro.objects.create(company=validated_data['pro']['company'])
+        pro.logo = logo
+        pro.save()
         validated_data['pro'] = pro
         return super(UserRegisterProSerializer, self).create(validated_data)
 
