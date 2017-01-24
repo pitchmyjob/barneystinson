@@ -17,12 +17,13 @@ def generate_upload_to(instance, filename):
 
 
 class Email(object):
-    def __init__(self, subject, to, context=None, template='default.html', from_email=None, reply_to=None):
+    def __init__(self, subject, to, context=None, template='default.html', from_email=None, reply_to=None, secure=1):
         self.subject = subject
         self.template = template
         self.context = context or {}
         self.from_email = from_email or settings.DEFAULT_FROM_EMAIL
         self.reply_to = reply_to or self.from_email
+        self.secure = secure
 
         if isinstance(to, User):
             self.to = [to.email]
@@ -39,6 +40,7 @@ class Email(object):
             'reply_to': self.reply_to,
             'template': self.template,
             'context': self.context,
+            'secure': self.secure,
         })
 
         if settings.DEBUG or force:
