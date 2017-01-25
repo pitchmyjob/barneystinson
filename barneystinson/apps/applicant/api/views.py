@@ -1,18 +1,20 @@
-from rest_framework import mixins
+from rest_framework import mixins, permissions
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from apps.core.api.mixins import IsAuthenticatedMixin
 
-from ..models import (Applicant, ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage,
-                      ApplicantInterest)
+from .permissions import IsApplicantUser
 from .serializers import (ApplicantSerializer, ApplicantExperienceSerializer, ApplicantEducationSerializer,
                           ApplicantSkillSerializer, ApplicantLanguageSerializer, ApplicantInterestSerializer)
+from ..models import (Applicant, ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage,
+                      ApplicantInterest)
 
 
 class ApplicantViewSet(IsAuthenticatedMixin,
                        mixins.RetrieveModelMixin,
                        mixins.UpdateModelMixin,
                        GenericViewSet):
+    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantSerializer
 
     def get_queryset(self):
@@ -20,6 +22,7 @@ class ApplicantViewSet(IsAuthenticatedMixin,
 
 
 class ApplicantExperienceViewSet(IsAuthenticatedMixin, ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantExperienceSerializer
 
     def get_queryset(self):
@@ -27,6 +30,7 @@ class ApplicantExperienceViewSet(IsAuthenticatedMixin, ModelViewSet):
 
 
 class ApplicantEducationViewSet(IsAuthenticatedMixin, ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantEducationSerializer
 
     def get_queryset(self):
@@ -34,6 +38,7 @@ class ApplicantEducationViewSet(IsAuthenticatedMixin, ModelViewSet):
 
 
 class ApplicantSkillViewSet(IsAuthenticatedMixin, ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantSkillSerializer
 
     def get_queryset(self):
@@ -41,6 +46,7 @@ class ApplicantSkillViewSet(IsAuthenticatedMixin, ModelViewSet):
 
 
 class ApplicantLanguageViewSet(IsAuthenticatedMixin, ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantLanguageSerializer
 
     def get_queryset(self):
@@ -48,6 +54,7 @@ class ApplicantLanguageViewSet(IsAuthenticatedMixin, ModelViewSet):
 
 
 class ApplicantInterestViewSet(IsAuthenticatedMixin, ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantInterestSerializer
 
     def get_queryset(self):
