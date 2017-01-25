@@ -1,34 +1,29 @@
+from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 
-from apps.core.api.mixins import IsAuthenticatedMixin, IsActiveDestroyMixin
+from apps.core.api.mixins import IsActiveDestroyMixin
+from apps.pro.api.permissions import IsProUser
 
 from ..models import Job, JobQuestion
 from .filters import JobFilter
 from .serializers import JobSerializer, JobQuestionSerializer
 
 
-class JobViewSet(IsAuthenticatedMixin, IsActiveDestroyMixin, ModelViewSet):
+class JobViewSet(IsActiveDestroyMixin, ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, IsProUser]
     serializer_class = JobSerializer
     filter_class = JobFilter
     search_fields = ('title', 'description')
 
     def get_queryset(self):
-        pro = self.request.user.pro
-        if pro:
-            qs = Job.objects.prefetch_related('contract_types', 'experiences', 'study_levels')
-            return qs.filter(pro=pro, is_active=True)
-        return Job.objects.none()
-
-    def perform_create(self, serializer):
-        serializer.save(pro=self.request.user.pro)
+        qs = Job.objects.prefetch_related('contract_types', 'experiences', 'study_levels')
+        return qs.filter(pro=self.request.user.pro, is_active=True)
 
 
-class JobQuestionViewSet(IsAuthenticatedMixin, ModelViewSet):
+class JobQuestionViewSet(ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, IsProUser]
     serializer_class = JobQuestionSerializer
     filter_fields = ('job',)
 
     def get_queryset(self):
-        pro = self.request.user.pro
-        if pro:
-            return JobQuestion.objects.filter(job__pro=pro, job__is_active=True)
-        return JobQuestion.objects.none()
+        JobQuestion.objects.filter(job__pro=self.request.user.pro, job__is_active=True)
