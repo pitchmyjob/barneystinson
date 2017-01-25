@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.fields import ImageField
@@ -22,3 +23,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    @cached_property
+    def is_pro(self):
+        return self.pro.pk is not None
+
+    @cached_property
+    def is_applicant(self):
+        return hasattr(self, 'applicant')
