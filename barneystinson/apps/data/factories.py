@@ -4,7 +4,7 @@ from apps.core.management.commands import _data as sample_data
 from .models import Industry, Employee, ContractType, Experience, StudyLevel
 
 
-class DataFactoryMixin(object):
+class DataFactoryMixin(factory.django.DjangoModelFactory):
     class Meta:
         abstract = True
 

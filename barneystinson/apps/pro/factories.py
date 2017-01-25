@@ -1,11 +1,14 @@
+import random
+
 import factory
 
+from apps.core.factories import LocalisationFactoryMixin
 from apps.data.factories import IndustryFactory, EmployeeFactory
 
 from .models import Pro
 
 
-class ProFactory(factory.django.DjangoModelFactory):
+class ProFactory(LocalisationFactoryMixin, factory.django.DjangoModelFactory):
     class Meta:
         model = Pro
 
@@ -15,6 +18,6 @@ class ProFactory(factory.django.DjangoModelFactory):
     phone = factory.Faker('phone_number')
     industry = factory.SubFactory(IndustryFactory)
     employes = factory.SubFactory(EmployeeFactory)
-    ca = 55000
+    ca = factory.LazyAttribute(lambda o: random.randint(60000, 100000))
     logo = None
     is_active = True

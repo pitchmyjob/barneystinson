@@ -34,6 +34,7 @@ class Email(object):
 
     def send(self, force=False):
         message = json.dumps({
+            'uuid': str(uuid.uuid4()),
             'subject': self.subject,
             'to': self.to,
             'from_email': self.from_email,
