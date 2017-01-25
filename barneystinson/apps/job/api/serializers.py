@@ -2,10 +2,14 @@ from rest_framework import serializers
 
 from django.utils.translation import ugettext as _
 
+from apps.pro.api.fields import CurrentProDefault
+
 from ..models import Job, JobQuestion
 
 
 class JobSerializer(serializers.ModelSerializer):
+    pro = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentProDefault())
+
     class Meta:
         model = Job
         fields = '__all__'
