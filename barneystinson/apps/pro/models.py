@@ -6,6 +6,8 @@ from apps.core.fields import ImageField
 
 
 class Pro(Localisation, models.Model):
+    DEFAULT_LOGO = 'pro/logo/default.jpg'
+
     company = models.CharField(_('raison sociale'), max_length=250)
     website = models.CharField(_('site web'), max_length=250, blank=True)
     description = models.TextField(_('description'), max_length=250, blank=True)
@@ -13,7 +15,7 @@ class Pro(Localisation, models.Model):
     industry = models.ForeignKey('data.Industry', default=1, verbose_name=_('secteur d\'activité'))
     employes = models.ForeignKey('data.Employee', null=True, verbose_name=_('nombre d\'employés'))
     ca = models.CharField(_('chiffre d\'affaire'), max_length=250, blank=True)
-    logo = ImageField(_('logo'), blank=True, default='pro/logo/default.jpg')
+    logo = ImageField(_('logo'), blank=True, default=DEFAULT_LOGO)
     is_active = models.BooleanField(_('est actif'), default=True)
 
     def __str__(self):

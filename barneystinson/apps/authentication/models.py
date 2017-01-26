@@ -7,9 +7,11 @@ from apps.core.fields import ImageField
 
 
 class User(AbstractUser):
+    DEFAULT_PHOTO = 'user/photo/default.jpg'
+
     username = models.CharField(_('username'), max_length=250, blank=True)
     email = models.EmailField(_('email address'), unique=True)
-    photo = ImageField(_('photo'), blank=True, default='user/photo/default.jpg')
+    photo = ImageField(_('photo'), blank=True, default=DEFAULT_PHOTO)
     phone = models.CharField(_('numéro de téléphone'), max_length=250, default='')
     position = models.CharField(_('poste occupé'), max_length=250, default='')
     pro = models.ForeignKey('pro.Pro', blank=True, null=True, verbose_name=_('pro'))
