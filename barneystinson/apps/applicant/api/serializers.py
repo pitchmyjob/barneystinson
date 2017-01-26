@@ -5,12 +5,6 @@ from ..models import (Applicant, ApplicantExperience, ApplicantEducation, Applic
 from .fields import CurrentApplicantDefault
 
 
-class ApplicantSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Applicant
-        fields = '__all__'
-
-
 class ApplicantExperienceSerializer(serializers.ModelSerializer):
     applicant = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentApplicantDefault())
 
@@ -48,4 +42,16 @@ class ApplicantInterestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ApplicantInterest
+        fields = '__all__'
+
+
+class ApplicantSerializer(serializers.ModelSerializer):
+    experiences = ApplicantExperienceSerializer(many=True)
+    educations = ApplicantEducationSerializer(many=True)
+    skills = ApplicantSkillSerializer(many=True)
+    languages = ApplicantLanguageSerializer(many=True)
+    interests = ApplicantInterestSerializer(many=True)
+
+    class Meta:
+        model = Applicant
         fields = '__all__'
