@@ -11,35 +11,34 @@ from ..models import User
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
-    photo = Base64ImageField(required=False)
     token = serializers.CharField(source='auth_token.key', read_only=True)
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'first_name', 'last_name', 'photo', 'token']
+        fields = ['email', 'password', 'first_name', 'last_name', 'token']
         extra_kwargs = {
             'password': {'write_only': True},
             'first_name': {'required': True},
             'last_name': {'required': True},
         }
 
+
+class UserRegisterApplicantSerializer(UserRegisterSerializer):
+    photo = Base64ImageField(required=False, default=User.DEFAULT_PHOTO)
+
+    class Meta(UserRegisterSerializer.Meta):
+        fields = UserRegisterSerializer.Meta.fields + ['photo']
+
     def create(self, validated_data):
         photo = validated_data.pop('photo', None)
         user = User.objects.create_user(username=validated_data['email'], **validated_data)
         user.photo = photo
         user.save()
-        return user
-
-
-class UserRegisterApplicantSerializer(UserRegisterSerializer):
-    def create(self, validated_data):
-        user = super(UserRegisterApplicantSerializer, self).create(validated_data)
         Applicant.objects.create(user=user)
         return user
 
-
 class UserRegisterProSerializer(UserRegisterSerializer):
-    logo = Base64ImageField(source='pro.logo', required=False)
+    logo = Base64ImageField(source='pro.logo', required=False, default=Pro.DEFAULT_LOGO)
     company = serializers.CharField(source='pro.company')
 
     class Meta(UserRegisterSerializer.Meta):
