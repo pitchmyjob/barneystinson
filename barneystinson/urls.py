@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^api/', include([
         url(r'^', include('apps.applicant.urls')),
         url(r'^', include('apps.authentication.urls')),
+        url(r'^', include('apps.candidacy.urls')),
         url(r'^', include('apps.data.urls')),
         url(r'^', include('apps.job.urls')),
         url(r'^', include('apps.pro.urls')),
