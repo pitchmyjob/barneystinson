@@ -37,6 +37,7 @@ class UserRegisterApplicantSerializer(UserRegisterSerializer):
         Applicant.objects.create(user=user)
         return user
 
+
 class UserRegisterProSerializer(UserRegisterSerializer):
     logo = Base64ImageField(source='pro.logo', required=False, default=Pro.DEFAULT_LOGO)
     company = serializers.CharField(source='pro.company')
