@@ -1,9 +1,8 @@
-from rest_framework.routers import SimpleRouter
+from django.conf.urls import url
 
-from .views import ProViewSet
+from .views import ProMeAPIView
 
 
-router = SimpleRouter()
-router.register('pros', ProViewSet, base_name='pro')
-
-urlpatterns = router.urls
+urlpatterns = [
+    url(r'^pro/me', ProMeAPIView.as_view(), name="pro"),
+]
