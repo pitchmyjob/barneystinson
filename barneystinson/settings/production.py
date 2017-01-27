@@ -22,3 +22,5 @@ DATABASES = {
 REST_FRAMEWORK_DOCS = {
     'HIDE_DOCS': True
 }
+
+EVENT_LOG = "EventLog"

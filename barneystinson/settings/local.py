@@ -23,3 +23,5 @@ DATABASES = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EVENT_LOG = "dev-EventLog"

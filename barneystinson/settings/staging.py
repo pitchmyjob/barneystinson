@@ -16,3 +16,5 @@ DATABASES = {
 REST_FRAMEWORK_DOCS = {
     'HIDE_DOCS': False
 }
+
+EVENT_LOG = "dev-EventLog"

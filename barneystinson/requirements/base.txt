@@ -11,3 +11,4 @@ Pillow==4.0.0
 psycopg2==2.6.2
 pytz==2016.10
 Unipath==1.1
+pynamodb==2.0.3
