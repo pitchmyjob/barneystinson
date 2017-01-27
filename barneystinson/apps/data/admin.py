@@ -9,6 +9,9 @@ class DataAdmin(object):
     list_filter = ('is_active',)
     search_fields = ('name',)
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 @admin.register(Industry)
 class IndustryAdmin(DataAdmin, admin.ModelAdmin):
