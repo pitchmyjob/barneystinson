@@ -86,3 +86,12 @@ class AutLoginSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+
+class UserSerializer(serializers.ModelSerializer):
+    photo = Base64ImageField(required=False, default=User.DEFAULT_PHOTO)
+
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'email', 'photo', 'is_pro', 'is_applicant')
+        read_only_fields = ('id', 'email', 'is_pro', 'is_applicant')
