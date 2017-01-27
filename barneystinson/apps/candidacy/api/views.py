@@ -4,11 +4,13 @@ from rest_framework.response import Response
 from django.db.models import F, Q
 
 from apps.job.models import Job
+from apps.applicant.api.permissions import IsApplicantUser
 from apps.pro.api.permissions import IsProUser
 
 from ..models import Candidacy
 from .serializers import (CandidacyProReadSerializer, CandidacyProRequestSerializer, CandidacyProApproveSerializer,
-                          CandidacyProDisapproveSerializer)
+                          CandidacyProDisapproveSerializer, CandidacyApplicantReadSerializer,
+                          CandidacyApplicantLikeSerializer, CandidacyApplicantVideoSerializer)
 
 
 class CandidacyProListAPIView(generics.ListAPIView):
@@ -65,3 +67,35 @@ class CandidacyProDisapproveAPIView(generics.UpdateAPIView):
 
     def get_queryset(self):
         return Candidacy.objects.filter(~Q(status=Candidacy.MATCHING), job__pro=self.request.user.pro)
+
+
+class CandidacyApplicantListAPIView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
+    serializer_class = CandidacyApplicantReadSerializer
+
+    def get_queryset(self):
+        return Candidacy.objects.filter(applicant=self.request.user.applicant)
+
+
+class CandidacyApplicantRetrieveAPIView(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
+    serializer_class = CandidacyApplicantReadSerializer
+
+    def get_queryset(self):
+        return Candidacy.objects.filter(applicant=self.request.user.applicant)
+
+
+class CandidacyApplicantLikeAPIView(generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
+    serializer_class = CandidacyApplicantLikeSerializer
+
+    def get_queryset(self):
+        return Candidacy.objects.filter(applicant=self.request.user.applicant)
+
+
+class CandidacyApplicantPostulateAPIView(generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
+    serializer_class = CandidacyApplicantVideoSerializer
+
+    def get_queryset(self):
+        return Candidacy.objects.filter(applicant=self.request.user.applicant)
