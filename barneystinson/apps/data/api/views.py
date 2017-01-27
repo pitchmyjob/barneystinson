@@ -7,25 +7,25 @@ from .serializers import (IndustrySerializer, EmployeeSerializer, ContractTypeSe
 
 
 class IndustryViewSet(ListModelMixin, GenericViewSet):
-    queryset = Industry.objects.all()
+    queryset = Industry.objects.filter(is_active=True)
     serializer_class = IndustrySerializer
 
 
 class EmployeeViewSet(ListModelMixin, GenericViewSet):
-    queryset = Employee.objects.all()
+    queryset = Employee.objects.filter(is_active=True)
     serializer_class = EmployeeSerializer
 
 
 class ContractTypeViewSet(ListModelMixin, GenericViewSet):
-    queryset = ContractType.objects.all()
+    queryset = ContractType.objects.filter(is_active=True)
     serializer_class = ContractTypeSerializer
 
 
 class ExperienceViewSet(ListModelMixin, GenericViewSet):
-    queryset = Experience.objects.all()
+    queryset = Experience.objects.filter(is_active=True)
     serializer_class = ExperienceSerializer
 
 
 class StudyLevelViewSet(ListModelMixin, GenericViewSet):
-    queryset = StudyLevel.objects.all()
+    queryset = StudyLevel.objects.filter(is_active=True)
     serializer_class = StudyLevelSerializer
