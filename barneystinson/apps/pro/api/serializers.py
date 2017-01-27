@@ -9,4 +9,4 @@ class ProSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pro
-        fields = '__all__'
+        exclude = ('is_active', )
