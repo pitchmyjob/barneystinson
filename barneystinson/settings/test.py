@@ -15,3 +15,5 @@ DATABASES = {
         'PASSWORD': get_env_variable('DJANGO_DB_DEV_PASSWORD'),
     }
 }
+
+EVENT_LOG = "dev-EventLog"
