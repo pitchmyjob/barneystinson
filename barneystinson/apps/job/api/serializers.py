@@ -3,6 +3,7 @@ from rest_framework import serializers
 from django.utils.translation import ugettext as _
 
 from apps.pro.api.fields import CurrentProDefault
+from apps.pro.api.serializers import ProSerializer
 
 from ..models import Job, JobQuestion
 
@@ -25,3 +26,11 @@ class JobQuestionSerializer(serializers.ModelSerializer):
         if value.pro != request.user.pro:
             raise serializers.ValidationError(_('L\'identifiant ne correspond pas à votre structure'))
         return value
+
+
+class JobFullSerializer(serializers.ModelSerializer):
+    pro = ProSerializer()
+
+    class Meta:
+        model = Job
+        fields = '__all__'

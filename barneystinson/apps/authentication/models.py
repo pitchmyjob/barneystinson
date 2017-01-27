@@ -28,7 +28,7 @@ class User(AbstractUser):
 
     @cached_property
     def is_pro(self):
-        return self.pro.pk is not None
+        return self.pro_id is not None
 
     @cached_property
     def is_applicant(self):
