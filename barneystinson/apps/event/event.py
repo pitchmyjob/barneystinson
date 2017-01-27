@@ -34,13 +34,12 @@ class ApplicantEvent(object):
         self.eventmodel.save()
 
 
-
 class JobEvent(object):
 
     EVENTS = {
-        'add_job' : 'JobWasAdded',
-        'edit_job' : 'JobWasModified',
-        'delete_job' : 'JobWasDeleted'
+        'add_job': 'JobWasAdded',
+        'edit_job': 'JobWasModified',
+        'delete_job': 'JobWasDeleted'
     }
 
     def __init__(self, id, payload, event):
