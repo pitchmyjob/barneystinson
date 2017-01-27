@@ -1,10 +1,10 @@
 import uuid
 import datetime
 
-from django.conf import settings
-
 from pynamodb.models import Model
 from pynamodb.attributes import NumberAttribute, UnicodeAttribute, UTCDateTimeAttribute, MapAttribute, BooleanAttribute
+
+from django.conf import settings
 
 
 class EventModel(Model):
