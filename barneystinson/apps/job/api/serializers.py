@@ -13,7 +13,7 @@ class JobSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Job
-        fields = '__all__'
+        exclude = ('is_active',)
 
 
 class JobQuestionSerializer(serializers.ModelSerializer):
