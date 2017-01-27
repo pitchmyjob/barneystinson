@@ -1,3 +1,6 @@
+import uuid
+import datetime
+
 from .models import EventModel
 
 
@@ -6,7 +9,7 @@ class EventMixin(object):
     EVENTS = None
 
     def __init__(self, id, payload, event):
-        self.eventmodel = EventModel(type=self.TYPE, id=id, payload=payload)
+        self.eventmodel = EventModel(type=self.TYPE, id=id, payload=payload, uuid=str(uuid.uuid4()), date=datetime.datetime.now())
         self.eventmodel.event = self.EVENTS.get(event)
 
         if hasattr(self, event):
