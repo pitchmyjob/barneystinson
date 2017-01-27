@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'apps.core.apps.CoreConfig',
     'apps.applicant.apps.ApplicantConfig',
     'apps.authentication.apps.AuthenticationConfig',
+    'apps.candidacy.apps.CandidacyConfig',
     'apps.pro.apps.ProConfig',
     'apps.data.apps.DataConfig',
     'apps.job.apps.JobConfig',

@@ -29,6 +29,7 @@ class Job(Localisation, TimeStampedModel, models.Model):
     view_counter = models.PositiveIntegerField(_('nombre de vue'), default=0)
     last_payment = models.DateTimeField(_('dernier paiement'), null=True, blank=True)
     is_active = models.BooleanField(_('est actif'), default=True)
+    request_credits = models.PositiveIntegerField(_('crédits demande d\'entretien'), default=0)
 
     objects = JobManager
 

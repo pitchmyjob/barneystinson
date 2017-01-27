@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from apps.core.behaviors import Localisation
 
-from .behaviors import ApplicantRelated, StartEndDate
+from .behaviors import StartEndDate
 
 
 class Applicant(Localisation, models.Model):
@@ -29,7 +29,8 @@ class Applicant(Localisation, models.Model):
         return '{} - {}'.format(self.user, self.title)
 
 
-class ApplicantExperience(ApplicantRelated, StartEndDate, models.Model):
+class ApplicantExperience(StartEndDate, models.Model):
+    applicant = models.ForeignKey('applicant.Applicant', related_name='experiences', verbose_name=_('postulant'))
     company = models.CharField(_('raison sociale'), max_length=250)
     position = models.CharField(_('poste'), max_length=250)
     location = models.CharField(_('lieu'), max_length=250, blank=True)
@@ -44,7 +45,8 @@ class ApplicantExperience(ApplicantRelated, StartEndDate, models.Model):
         return '{} - {}'.format(self.company, self.position)
 
 
-class ApplicantEducation(ApplicantRelated, StartEndDate, models.Model):
+class ApplicantEducation(StartEndDate, models.Model):
+    applicant = models.ForeignKey('applicant.Applicant', related_name='educations', verbose_name=_('postulant'))
     school = models.CharField(_('établissement'), max_length=250)
     degree = models.CharField(_('formation'), max_length=250)
     description = models.TextField(_('description'), blank=True)
@@ -58,7 +60,8 @@ class ApplicantEducation(ApplicantRelated, StartEndDate, models.Model):
         return '{} - {}'.format(self.school, self.degree)
 
 
-class ApplicantSkill(ApplicantRelated, models.Model):
+class ApplicantSkill(models.Model):
+    applicant = models.ForeignKey('applicant.Applicant', related_name='skills', verbose_name=_('postulant'))
     name = models.CharField(_('nom'), max_length=250)
     level = models.PositiveSmallIntegerField(_('niveau'), null=True, blank=True)
 
@@ -70,7 +73,8 @@ class ApplicantSkill(ApplicantRelated, models.Model):
         return self.name
 
 
-class ApplicantLanguage(ApplicantRelated, models.Model):
+class ApplicantLanguage(models.Model):
+    applicant = models.ForeignKey('applicant.Applicant', related_name='languages', verbose_name=_('postulant'))
     name = models.CharField(_('nom'), max_length=250)
     level = models.PositiveSmallIntegerField(_('niveau'), null=True, blank=True)
 
@@ -82,7 +86,8 @@ class ApplicantLanguage(ApplicantRelated, models.Model):
         return self.name
 
 
-class ApplicantInterest(ApplicantRelated, models.Model):
+class ApplicantInterest(models.Model):
+    applicant = models.ForeignKey('applicant.Applicant', related_name='interests', verbose_name=_('postulant'))
     name = models.CharField(_('nom'), max_length=250)
 
     class Meta:
