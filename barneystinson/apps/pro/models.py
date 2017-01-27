@@ -18,5 +18,9 @@ class Pro(Localisation, models.Model):
     logo = ImageField(_('logo'), blank=True, default=DEFAULT_LOGO)
     is_active = models.BooleanField(_('est actif'), default=True)
 
+    class Meta:
+        verbose_name = _('pro')
+        verbose_name_plural = _('pros')
+
     def __str__(self):
         return self.company

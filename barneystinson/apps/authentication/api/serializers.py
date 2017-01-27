@@ -22,6 +22,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             'last_name': {'required': True},
         }
 
+    def create(self, validated_data):
+        return User.objects.create_user(username=validated_data['email'], **validated_data)
+
 
 class UserRegisterApplicantSerializer(UserRegisterSerializer):
     photo = Base64ImageField(required=False, default=User.DEFAULT_PHOTO)
@@ -31,7 +34,7 @@ class UserRegisterApplicantSerializer(UserRegisterSerializer):
 
     def create(self, validated_data):
         photo = validated_data.pop('photo', None)
-        user = User.objects.create_user(username=validated_data['email'], **validated_data)
+        user = super(UserRegisterApplicantSerializer, self).create(validated_data)
         user.photo = photo
         user.save()
         Applicant.objects.create(user=user)

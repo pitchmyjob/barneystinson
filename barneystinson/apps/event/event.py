@@ -1,8 +1,23 @@
 from .models import EventModel
 
 
-class ApplicantEvent(object):
+class EventMixin(object):
+    TYPE = None
+    EVENTS = None
 
+    def __init__(self, id, payload, event):
+        self.eventmodel = EventModel(type=self.TYPE, id=id, payload=payload)
+        self.eventmodel.event = self.EVENTS.get(event)
+
+        if hasattr(self, event):
+            getattr(self, event)()
+
+    def save(self):
+        self.eventmodel.save()
+
+
+class ApplicantEvent(EventMixin):
+    TYPE = 'ApplicantEvent'
     EVENTS = {
         'add_applicant': 'ApplicantWasAdded',
         'edit_applicant': 'ApplicantWasModified',
@@ -23,31 +38,11 @@ class ApplicantEvent(object):
         'delete_language': 'LanguageWasDeleted',
     }
 
-    def __init__(self, id, payload, event):
-        self.eventmodel = EventModel(type="ApplicantEvent", id=id, payload=payload)
-        self.eventmodel.event = self.EVENTS.get(event)
 
-        if hasattr(self, event):
-            getattr(self, event)()
-
-    def save(self):
-        self.eventmodel.save()
-
-
-class JobEvent(object):
-
+class JobEvent(EventMixin):
+    TYPE = 'JobEvent'
     EVENTS = {
         'add_job': 'JobWasAdded',
         'edit_job': 'JobWasModified',
         'delete_job': 'JobWasDeleted'
     }
-
-    def __init__(self, id, payload, event):
-        self.eventmodel = EventModel(type="JobEvent", id=id, payload=payload)
-        self.eventmodel.event = self.EVENTS.get(event)
-
-        if hasattr(self, event):
-            getattr(self, event)()
-
-    def save(self):
-        self.eventmodel.save()

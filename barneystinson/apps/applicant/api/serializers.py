@@ -63,3 +63,9 @@ class ApplicantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Applicant
         fields = '__all__'
+
+
+class ApplicantMeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Applicant
+        exclude = ('user',)

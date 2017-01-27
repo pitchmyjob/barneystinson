@@ -26,4 +26,4 @@ class JobQuestionViewSet(ModelViewSet):
     filter_fields = ('job',)
 
     def get_queryset(self):
-        JobQuestion.objects.filter(job__pro=self.request.user.pro, job__is_active=True)
+        return JobQuestion.objects.filter(job__pro=self.request.user.pro, job__is_active=True)

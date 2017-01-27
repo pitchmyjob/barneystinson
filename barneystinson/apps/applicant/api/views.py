@@ -1,24 +1,20 @@
-from rest_framework import mixins, permissions
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework import generics, permissions
+from rest_framework.viewsets import ModelViewSet
 
 from apps.core.api.mixins import IsAuthenticatedMixin
 
 from .permissions import IsApplicantUser
-from .serializers import (ApplicantSerializer, ApplicantExperienceSerializer, ApplicantEducationSerializer,
+from .serializers import (ApplicantMeSerializer, ApplicantExperienceSerializer, ApplicantEducationSerializer,
                           ApplicantSkillSerializer, ApplicantLanguageSerializer, ApplicantInterestSerializer)
-from ..models import (Applicant, ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage,
-                      ApplicantInterest)
+from ..models import ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage, ApplicantInterest
 
 
-class ApplicantViewSet(IsAuthenticatedMixin,
-                       mixins.RetrieveModelMixin,
-                       mixins.UpdateModelMixin,
-                       GenericViewSet):
+class ApplicantMeAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
-    serializer_class = ApplicantSerializer
+    serializer_class = ApplicantMeSerializer
 
-    def get_queryset(self):
-        return Applicant.objects.filter(user=self.request.user)
+    def get_object(self):
+        return self.request.user.applicant
 
 
 class ApplicantExperienceViewSet(IsAuthenticatedMixin, ModelViewSet):
