@@ -1,39 +1,23 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, status
 from rest_framework.response import Response
 
-from django.db.models import F, Q
+from django.db.models import F
 
 from apps.job.models import Job
-from apps.applicant.api.permissions import IsApplicantUser
-from apps.pro.api.permissions import IsProUser
 
+from .mixins import CandidacyProMixin, CandidacyApplicantMixin
 from ..models import Candidacy
-from .serializers import (CandidacyProReadSerializer, CandidacyProRequestSerializer, CandidacyProApproveSerializer,
-                          CandidacyProDisapproveSerializer, CandidacyApplicantReadSerializer,
-                          CandidacyApplicantLikeSerializer, CandidacyApplicantVideoSerializer)
 
 
-class CandidacyProListAPIView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsProUser]
-    serializer_class = CandidacyProReadSerializer
-
-    def get_queryset(self):
-        qs_filter = {'job': self.kwargs[self.lookup_field]}
-        return Candidacy.objects.filter(~Q(status=Candidacy.MATCHING), job__pro=self.request.user.pro, **qs_filter)
+class CandidacyProListAPIView(CandidacyProMixin, generics.ListAPIView):
+    pass
 
 
-class CandidacyProRetrieveAPIView(generics.RetrieveAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsProUser]
-    serializer_class = CandidacyProReadSerializer
-
-    def get_queryset(self):
-        return Candidacy.objects.filter(~Q(status=Candidacy.MATCHING), job__pro=self.request.user.pro)
+class CandidacyProRetrieveAPIView(CandidacyProMixin, generics.RetrieveAPIView):
+    pass
 
 
-class CandidacyProRequestAPIView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsProUser]
-    serializer_class = CandidacyProRequestSerializer
-
+class CandidacyProRequestAPIView(CandidacyProMixin, generics.GenericAPIView):
     def post(self, request):
         job = request.data.get('job')
         applicant = request.data.get('applicant')
@@ -53,49 +37,25 @@ class CandidacyProRequestAPIView(generics.GenericAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class CandidacyProApproveAPIView(generics.UpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsProUser]
-    serializer_class = CandidacyProApproveSerializer
-
-    def get_queryset(self):
-        return Candidacy.objects.filter(~Q(status=Candidacy.MATCHING), job__pro=self.request.user.pro)
+class CandidacyProApproveAPIView(CandidacyProMixin, generics.UpdateAPIView):
+    pass
 
 
-class CandidacyProDisapproveAPIView(generics.UpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsProUser]
-    serializer_class = CandidacyProDisapproveSerializer
-
-    def get_queryset(self):
-        return Candidacy.objects.filter(~Q(status=Candidacy.MATCHING), job__pro=self.request.user.pro)
+class CandidacyProDisapproveAPIView(CandidacyProMixin, generics.UpdateAPIView):
+    pass
 
 
-class CandidacyApplicantListAPIView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
-    serializer_class = CandidacyApplicantReadSerializer
-
-    def get_queryset(self):
-        return Candidacy.objects.filter(applicant=self.request.user.applicant)
+class CandidacyApplicantListAPIView(CandidacyApplicantMixin, generics.ListAPIView):
+    pass
 
 
-class CandidacyApplicantRetrieveAPIView(generics.RetrieveAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
-    serializer_class = CandidacyApplicantReadSerializer
-
-    def get_queryset(self):
-        return Candidacy.objects.filter(applicant=self.request.user.applicant)
+class CandidacyApplicantRetrieveAPIView(CandidacyApplicantMixin, generics.RetrieveAPIView):
+    pass
 
 
-class CandidacyApplicantLikeAPIView(generics.UpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
-    serializer_class = CandidacyApplicantLikeSerializer
-
-    def get_queryset(self):
-        return Candidacy.objects.filter(applicant=self.request.user.applicant)
+class CandidacyApplicantLikeAPIView(CandidacyApplicantMixin, generics.UpdateAPIView):
+    pass
 
 
-class CandidacyApplicantPostulateAPIView(generics.UpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
-    serializer_class = CandidacyApplicantVideoSerializer
-
-    def get_queryset(self):
-        return Candidacy.objects.filter(applicant=self.request.user.applicant)
+class CandidacyApplicantPostulateAPIView(CandidacyApplicantMixin, generics.UpdateAPIView):
+    pass
