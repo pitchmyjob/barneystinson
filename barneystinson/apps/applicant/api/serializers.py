@@ -1,7 +1,6 @@
-from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
-from apps.authentication.models import User
+from apps.authentication.api.serializers import UserSerializer
 
 from ..models import (Applicant, ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage,
                       ApplicantInterest)
@@ -48,12 +47,8 @@ class ApplicantInterestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ApplicantSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
-    first_name = serializers.CharField(source='user.first_name', read_only=True)
-    last_name = serializers.CharField(source='user.last_name', read_only=True)
-    email = serializers.CharField(source='user.email', read_only=True)
-    photo = Base64ImageField(source='user.photo', read_only=True, default=User.DEFAULT_PHOTO)
+class ApplicantFullSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     experiences = ApplicantExperienceSerializer(many=True, read_only=True)
     educations = ApplicantEducationSerializer(many=True, read_only=True)
     skills = ApplicantSkillSerializer(many=True, read_only=True)

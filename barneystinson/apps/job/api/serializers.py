@@ -8,6 +8,14 @@ from apps.pro.api.serializers import ProSerializer
 from ..models import Job, JobQuestion
 
 
+class ValidateJobSerializer(object):
+    def validate_job(self, value):
+        request = self.context.get('request')
+        if value.pro != request.user.pro:
+            raise serializers.ValidationError(_('L\'identifiant ne correspond pas à votre structure'))
+        return value
+
+
 class JobSerializer(serializers.ModelSerializer):
     pro = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentProDefault())
 
@@ -16,16 +24,10 @@ class JobSerializer(serializers.ModelSerializer):
         exclude = ('is_active',)
 
 
-class JobQuestionSerializer(serializers.ModelSerializer):
+class JobQuestionSerializer(ValidateJobSerializer, serializers.ModelSerializer):
     class Meta:
         model = JobQuestion
         fields = '__all__'
-
-    def validate_job(self, value):
-        request = self.context.get('request')
-        if value.pro != request.user.pro:
-            raise serializers.ValidationError(_('L\'identifiant ne correspond pas à votre structure'))
-        return value
 
 
 class JobFullSerializer(serializers.ModelSerializer):

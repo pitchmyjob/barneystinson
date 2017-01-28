@@ -5,7 +5,7 @@ from ..models import Pro
 
 
 class ProSerializer(serializers.ModelSerializer):
-    logo = Base64ImageField(required=False)
+    logo = Base64ImageField(required=False, default=Pro.DEFAULT_LOGO)
 
     class Meta:
         model = Pro
