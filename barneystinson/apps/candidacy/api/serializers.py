@@ -1,11 +1,13 @@
 from rest_framework import serializers
 
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 from apps.applicant.api.serializers import ApplicantFullSerializer
+from apps.authentication.api.serializers import UserSerializer
 from apps.job.api.serializers import JobFullSerializer, ValidateJobSerializer
 
-from ..models import Candidacy
+from ..models import Candidacy, CandidacyComment
 
 
 class CandidacyProReadSerializer(serializers.ModelSerializer):
@@ -88,3 +90,19 @@ class CandidacyApplicantLikeSerializer(CandidacyApplicantActionSerializer):
 class CandidacyApplicantVideoSerializer(CandidacyApplicantActionSerializer):
     status_value = Candidacy.VIDEO
     date_field = 'date_video'
+
+
+class CandidacyProCommentSerializer(serializers.ModelSerializer):
+    collaborator = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    collaborator_extra = UserSerializer(source='collaborator', read_only=True)
+
+    class Meta:
+        model = CandidacyComment
+        fields = ('id', 'candidacy', 'collaborator', 'collaborator_extra', 'message')
+        read_only_fields = ('id',)
+
+    def validate_candidacy(self, value):
+        request = self.context.get('request')
+        if value.job.pro != request.user.pro:
+            raise serializers.ValidationError(_('La candidature ne correspond pas à une offre de votre structure'))
+        return value

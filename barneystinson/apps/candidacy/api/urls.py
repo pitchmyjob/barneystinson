@@ -1,12 +1,17 @@
+from rest_framework.routers import SimpleRouter
+
 from django.conf.urls import url
 
 from .views import (CandidacyProListAPIView, CandidacyProRetrieveAPIView, CandidacyProRequestAPIView,
                     CandidacyProApproveAPIView, CandidacyProDisapproveAPIView, CandidacyApplicantListAPIView,
                     CandidacyApplicantRetrieveAPIView, CandidacyApplicantLikeAPIView,
-                    CandidacyApplicantPostulateAPIView)
+                    CandidacyApplicantPostulateAPIView, CandidacyProCommentViewSet)
 
 
-urlpatterns = [
+router = SimpleRouter()
+router.register(r'^pro/candidacy/comments', CandidacyProCommentViewSet, base_name='procandidacy-comment')
+
+urlpatterns = router.urls + [
     url(r'^pro/candidacies/(?P<job_pk>\d+)', CandidacyProListAPIView.as_view(), name='procandidacy-list'),
     url(r'^pro/candidacy/(?P<pk>\d+)/approve', CandidacyProApproveAPIView.as_view(), name='procandidacy-approve'),
     url(r'^pro/candidacy/(?P<pk>\d+)/disapprove', CandidacyProDisapproveAPIView.as_view(),
