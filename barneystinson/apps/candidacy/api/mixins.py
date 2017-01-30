@@ -14,7 +14,7 @@ from ..models import Candidacy
 class CandidacyMixin(object):
     def get_serializer_class(self):
         url_name = self.request.resolver_match.url_name
-        return self.serializer_class.get(url_name)
+        return self.serializers_class.get(url_name)
 
 
 class CandidacyProPermissionMixin(object):
@@ -22,7 +22,7 @@ class CandidacyProPermissionMixin(object):
 
 
 class CandidacyProMixin(CandidacyProPermissionMixin, CandidacyMixin):
-    serializer_class = {
+    serializers_class = {
         'procandidacy-list': CandidacyProReadSerializer,
         'procandidacy-detail': CandidacyProReadSerializer,
         'procandidacy-request': CandidacyProRequestSerializer,
@@ -39,7 +39,7 @@ class CandidacyProMixin(CandidacyProPermissionMixin, CandidacyMixin):
 
 class CandidacyApplicantMixin(CandidacyMixin):
     permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
-    serializer_class = {
+    serializers_class = {
         'applicantcandidacy-list': CandidacyApplicantReadSerializer,
         'applicantcandidacy-detail': CandidacyApplicantReadSerializer,
         'applicantcandidacy-like': CandidacyApplicantLikeSerializer,
