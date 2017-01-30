@@ -1,12 +1,14 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, mixins
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from django.db.models import F
 
 from apps.job.models import Job
 
-from .mixins import CandidacyProMixin, CandidacyApplicantMixin
-from ..models import Candidacy
+from .mixins import CandidacyProMixin, CandidacyApplicantMixin, CandidacyProPermissionMixin
+from .serializers import CandidacyProCommentSerializer
+from ..models import Candidacy, CandidacyComment
 
 
 class CandidacyProListAPIView(CandidacyProMixin, generics.ListAPIView):
@@ -59,3 +61,15 @@ class CandidacyApplicantLikeAPIView(CandidacyApplicantMixin, generics.UpdateAPIV
 
 class CandidacyApplicantPostulateAPIView(CandidacyApplicantMixin, generics.UpdateAPIView):
     pass
+
+
+class CandidacyProCommentViewSet(CandidacyProPermissionMixin,
+                                 mixins.ListModelMixin,
+                                 mixins.CreateModelMixin,
+                                 mixins.DestroyModelMixin,
+                                 GenericViewSet):
+    serializer_class = CandidacyProCommentSerializer
+    filter_fields = ('candidacy',)
+
+    def get_queryset(self):
+        return CandidacyComment.objects.filter(candidacy__job__pro=self.request.user.pro)
