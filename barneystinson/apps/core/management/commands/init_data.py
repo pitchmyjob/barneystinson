@@ -1,4 +1,5 @@
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
 from apps.authentication.models import User
@@ -33,9 +34,10 @@ class Command(BaseCommand):
     def add_groups(self):
         self.stdout.write('\n>> Add groups')
 
-        names = getattr(self, 'groups', None)
-        if names:
-            for name in names:
+        groups = getattr(self, 'groups', None)
+        if groups:
+            for group in groups:
+                name = group.get('name')
                 obj, created = Group.objects.get_or_create(name=name)
                 if created:
                     message = '"{}" has been created with id {}'.format(name, obj.pk)
@@ -43,6 +45,20 @@ class Command(BaseCommand):
                 else:
                     message = '"{}" already exists with id {}'.format(name, obj.pk)
                     self.stdout.write(self.style.WARNING(message))
+
+                permissions = group.get('permissions')
+                if permissions:
+                    for permission in permissions:
+                        app_label = permission.get('app_label')
+                        model_name = permission.get('model')
+                        codenames = permission.get('codenames')
+
+                        content_type = ContentType.objects.get(app_label=app_label, model=model_name)
+                        perms = Permission.objects.filter(content_type=content_type, codename__in=codenames)
+                        for perm in perms:
+                            message = '\t"{}" has been added to group'.format(perm.codename)
+                            self.stdout.write(self.style.SUCCESS(message))
+                            obj.permissions.add(perm)
         else:
             self.stderr.write('No data to deal with')
 
