@@ -42,7 +42,6 @@ class Candidacy(models.Model):
 
     @property
     def is_matching(self):
-        print(self.status, self.MATCHING, self.status == self.MATCHING)
         return self.status == self.MATCHING
 
 
