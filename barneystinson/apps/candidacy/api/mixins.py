@@ -17,8 +17,11 @@ class CandidacyMixin(object):
         return self.serializer_class.get(url_name)
 
 
-class CandidacyProMixin(CandidacyMixin):
+class CandidacyProPermissionMixin(object):
     permission_classes = [permissions.IsAuthenticated, IsProUser]
+
+
+class CandidacyProMixin(CandidacyProPermissionMixin, CandidacyMixin):
     serializer_class = {
         'procandidacy-list': CandidacyProReadSerializer,
         'procandidacy-detail': CandidacyProReadSerializer,
