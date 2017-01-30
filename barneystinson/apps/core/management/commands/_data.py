@@ -81,8 +81,12 @@ STUDY_LEVELS = [
 ]
 
 GROUPS = [
-    'Pro',
-    'Member',
+    {'name': 'Gestion des collaborateurs', 'permissions': [
+        {'app_label': 'authentication', 'model': 'user', 'codenames': ['add_user', 'change_user', 'delete_user']},
+    ]},
+    {'name': 'Gestion des pros', 'permissions': [
+        {'app_label': 'pro', 'model': 'pro', 'codenames': ['change_pro', 'delete_pro']},
+    ]},
 ]
 
 ADMINS = [
