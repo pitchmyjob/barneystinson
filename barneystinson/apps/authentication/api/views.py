@@ -1,9 +1,9 @@
 from rest_framework import generics, permissions
 
+from apps.event.mixins import EventApplicantMixin
+
 from .mixins import AuthLoginMixin
-from apps.event.mixins import EventApplicantMixin
 from .serializers import UserRegisterApplicantSerializer, UserRegisterProSerializer, AutLoginSerializer, UserSerializer
-from apps.event.mixins import EventApplicantMixin
 
 
 class AuthRegisterApplicantAPIView(EventApplicantMixin, generics.CreateAPIView):
