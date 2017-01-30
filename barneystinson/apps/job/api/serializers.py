@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from apps.pro.api.fields import CurrentProDefault
@@ -36,3 +37,14 @@ class JobFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = '__all__'
+
+
+class JobPublishSerializer(ValidateJobSerializer, serializers.ModelSerializer):
+    class Meta:
+        model = Job
+        fields = ('id', 'last_payment')
+        read_only_fields = ('last_payment',)
+
+    def update(self, instance, validated_data):
+        validated_data['last_payment'] = timezone.now()
+        return super(JobPublishSerializer, self).update(instance, validated_data)
