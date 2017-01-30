@@ -2,6 +2,7 @@ from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import Group
 from django.utils.translation import ugettext as _
 
 from apps.applicant.models import Applicant
@@ -55,7 +56,10 @@ class UserRegisterProSerializer(UserRegisterSerializer):
         pro.logo = logo
         pro.save()
         validated_data['pro'] = pro
-        return super(UserRegisterProSerializer, self).create(validated_data)
+        user = super(UserRegisterProSerializer, self).create(validated_data)
+        user.groups.add(Group.objects.get(name='handle_pro'))
+        user.groups.add(Group.objects.get(name='handle_collaborator'))
+        return user
 
 
 class AutLoginSerializer(serializers.Serializer):
