@@ -3,6 +3,7 @@ from rest_framework import generics, permissions
 from .mixins import AuthLoginMixin
 from apps.event.mixins import EventApplicantMixin
 from .serializers import UserRegisterApplicantSerializer, UserRegisterProSerializer, AutLoginSerializer, UserSerializer
+from apps.event.mixins import EventApplicantMixin
 
 
 class AuthRegisterApplicantAPIView(EventApplicantMixin, generics.CreateAPIView):
@@ -24,9 +25,10 @@ class AuthLoginProAPIView(AuthLoginMixin, generics.GenericAPIView):
     login_type = 'pro'
 
 
-class AuthMeAPIView(generics.RetrieveUpdateAPIView):
+class AuthMeAPIView(EventApplicantMixin, generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserSerializer
+    event_type = 'applicant'
 
     def get_object(self):
         return self.request.user
