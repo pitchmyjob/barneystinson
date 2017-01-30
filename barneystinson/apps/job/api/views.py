@@ -1,4 +1,4 @@
-from rest_framework import permissions
+from rest_framework import decorators, permissions
 from rest_framework.viewsets import ModelViewSet
 
 from apps.core.api.mixins import IsActiveDestroyMixin
@@ -6,7 +6,7 @@ from apps.pro.api.permissions import IsProUser
 
 from ..models import Job, JobQuestion
 from .filters import JobFilter
-from .serializers import JobSerializer, JobQuestionSerializer
+from .serializers import JobSerializer, JobQuestionSerializer, JobPublishSerializer
 
 
 class JobViewSet(IsActiveDestroyMixin, ModelViewSet):
@@ -18,6 +18,11 @@ class JobViewSet(IsActiveDestroyMixin, ModelViewSet):
     def get_queryset(self):
         qs = Job.objects.prefetch_related('contract_types', 'experiences', 'study_levels')
         return qs.filter(pro=self.request.user.pro, is_active=True)
+
+    @decorators.list_route(methods=['put', 'patch'], serializer_class=JobPublishSerializer)
+    def publish(self, request, pk=None):
+        self.kwargs['pk'] = request.data.get('job', None)
+        return self.update(request)
 
 
 class JobQuestionViewSet(ModelViewSet):
