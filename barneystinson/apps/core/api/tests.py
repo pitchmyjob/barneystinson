@@ -1,6 +1,7 @@
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
+from django.contrib.auth.models import Group
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.six import text_type
 
@@ -46,6 +47,9 @@ class BaseAPITestCase(APITestCase):
     def authenticate_user(self):
         self.user = self.generate_user()
         self.client.force_authenticate(self.user)
+
+    def add_group_to_user(self, name):
+        self.user.groups.add(Group.objects.get(name=name))
 
 
 class ListAPITestCaseMixin(object):
