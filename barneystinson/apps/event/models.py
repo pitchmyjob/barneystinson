@@ -11,7 +11,7 @@ class EventModel(Model):
     event = UnicodeAttribute(null=False)
     date = UTCDateTimeAttribute(null=False)
     payload = MapAttribute(null=False)
-    read = BooleanAttribute(default=False)
+    is_read = BooleanAttribute(default=False)
 
     class Meta:
         table_name = settings.EVENT_LOG
