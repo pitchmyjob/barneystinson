@@ -5,6 +5,8 @@ from rest_framework.viewsets import GenericViewSet
 from django.db.models import F
 
 from apps.job.models import Job
+from apps.notification import types
+from apps.notification.mixins import NotificationtMixin
 
 from .mixins import CandidacyProMixin, CandidacyApplicantMixin, CandidacyProPermissionMixin
 from .serializers import CandidacyProCommentSerializer
@@ -19,7 +21,9 @@ class CandidacyProRetrieveAPIView(CandidacyProMixin, generics.RetrieveAPIView):
     pass
 
 
-class CandidacyProRequestAPIView(CandidacyProMixin, generics.GenericAPIView):
+class CandidacyProRequestAPIView(NotificationtMixin, CandidacyProMixin, generics.GenericAPIView):
+    notification_type = types.APPLICANT_CANDIDACY_REQUESTED
+
     def post(self, request):
         job = request.data.get('job')
         applicant = request.data.get('applicant')
@@ -31,20 +35,22 @@ class CandidacyProRequestAPIView(CandidacyProMixin, generics.GenericAPIView):
             if candidacy.is_matching:
                 Job.objects.filter(pk=job).update(request_credits=F('request_credits') - 1)
             serializer.save()
+            self.send_notification(serializer.instance, request.user)
             return Response(serializer.data)
         else:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            self.send_notification(serializer.instance, request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class CandidacyProApproveAPIView(CandidacyProMixin, generics.UpdateAPIView):
-    pass
+class CandidacyProApproveAPIView(NotificationtMixin, CandidacyProMixin, generics.UpdateAPIView):
+    notification_type = types.APPLICANT_CANDIDACY_APPROVED
 
 
-class CandidacyProDisapproveAPIView(CandidacyProMixin, generics.UpdateAPIView):
-    pass
+class CandidacyProDisapproveAPIView(NotificationtMixin, CandidacyProMixin, generics.UpdateAPIView):
+    notification_type = types.APPLICANT_CANDIDACY_DISAPPROVED
 
 
 class CandidacyApplicantListAPIView(CandidacyApplicantMixin, generics.ListAPIView):
@@ -55,19 +61,21 @@ class CandidacyApplicantRetrieveAPIView(CandidacyApplicantMixin, generics.Retrie
     pass
 
 
-class CandidacyApplicantLikeAPIView(CandidacyApplicantMixin, generics.UpdateAPIView):
-    pass
+class CandidacyApplicantLikeAPIView(NotificationtMixin, CandidacyApplicantMixin, generics.UpdateAPIView):
+    notification_type = types.PRO_JOB_LIKED
 
 
-class CandidacyApplicantPostulateAPIView(CandidacyApplicantMixin, generics.UpdateAPIView):
-    pass
+class CandidacyApplicantPostulateAPIView(NotificationtMixin, CandidacyApplicantMixin, generics.UpdateAPIView):
+    notification_type = types.PRO_JOB_NEW_CANDIDACY
 
 
-class CandidacyProCommentViewSet(CandidacyProPermissionMixin,
+class CandidacyProCommentViewSet(NotificationtMixin,
+                                 CandidacyProPermissionMixin,
                                  mixins.ListModelMixin,
                                  mixins.CreateModelMixin,
                                  mixins.DestroyModelMixin,
                                  GenericViewSet):
+    notification_type = types.PRO_CANDIDACY_NEW_COMMENT
     serializer_class = CandidacyProCommentSerializer
     filter_fields = ('candidacy',)
 
