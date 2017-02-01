@@ -24,6 +24,7 @@ urlpatterns = [
         url(r'^', include('apps.data.urls')),
         url(r'^', include('apps.job.urls')),
         url(r'^', include('apps.pro.urls')),
+        url(r'^', include('apps.notification.urls')),
     ])),
     url(r'^admin/', admin.site.urls),
     url(r'^docs/', include('rest_framework_docs.urls')),

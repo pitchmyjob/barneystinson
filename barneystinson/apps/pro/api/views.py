@@ -2,6 +2,8 @@ from rest_framework import generics, mixins, permissions
 from rest_framework.viewsets import GenericViewSet
 
 from apps.authentication.models import User
+from apps.notification import types
+from apps.notification.api.mixins import NotificationtMixin
 from apps.core.api.mixins import IsActiveDestroyMixin
 
 from .permissions import IsProUser
@@ -22,13 +24,18 @@ class ProMeAPIView(IsActiveDestroyMixin, generics.RetrieveUpdateDestroyAPIView):
         return self.request.user.pro
 
 
-class ProCollaboratorViewSet(IsActiveDestroyMixin,
+class ProCollaboratorViewSet(NotificationtMixin,
+                             IsActiveDestroyMixin,
                              mixins.ListModelMixin,
                              mixins.CreateModelMixin,
                              mixins.DestroyModelMixin,
                              GenericViewSet):
     permission_classes = [permissions.IsAuthenticated, permissions.DjangoModelPermissions, IsProUser]
     serializer_class = UserRegisterCollaboratorSerializer
+    map_action_to_notification_type = {
+        'create': types.PRO_COLLABORATOR_ADDED,
+        'destroy': types.PRO_COLLABORATOR_DELETED,
+    }
     queryset = User.objects.none()
 
     def get_queryset(self):

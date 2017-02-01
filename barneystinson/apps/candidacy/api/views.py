@@ -6,7 +6,7 @@ from django.db.models import F
 
 from apps.job.models import Job
 from apps.notification import types
-from apps.notification.mixins import NotificationtMixin
+from apps.notification.api.mixins import NotificationtMixin
 
 from .mixins import CandidacyProMixin, CandidacyApplicantMixin, CandidacyProPermissionMixin
 from .serializers import CandidacyProCommentSerializer
