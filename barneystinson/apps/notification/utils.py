@@ -5,7 +5,6 @@ from django.db.models.query import QuerySet
 from apps.core.utils import Email
 from apps.candidacy.models import Candidacy, CandidacyComment
 from apps.job.models import Job
-from apps.pro.models import Pro
 
 from .models import Notification
 
@@ -39,26 +38,22 @@ class NotificationHandler(object):
         self.send_emails('Nouveau message', receivers, 'applicant/candidacy_new_message.html')
 
     def perform_pro_job_added(self):
-        # TODO
-        receivers = self.action_object.job.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
+        receivers = self.action_object.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
         self.send_notifications(receivers)
         self.send_emails('Offre ajoutée', receivers, 'pro/job_added.html')
 
     def perform_pro_job_updated(self):
-        # TODO
-        receivers = self.action_object.job.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
+        receivers = self.action_object.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
         self.send_notifications(receivers)
         self.send_emails('Offre modifiée', receivers, 'pro/job_updated.html')
 
     def perform_pro_job_published(self):
-        # TODO
-        receivers = self.action_object.job.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
+        receivers = self.action_object.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
         self.send_notifications(receivers)
         self.send_emails('Offre publiée', receivers, 'pro/job_published.html')
 
     def perform_pro_job_deleted(self):
-        # TODO
-        receivers = self.action_object.job.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
+        receivers = self.action_object.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
         self.send_notifications(receivers)
         self.send_emails('Offre supprimée', receivers, 'pro/job_deleted.html')
 
@@ -76,20 +71,18 @@ class NotificationHandler(object):
         self.send_emails('Nouvelle candidature', receivers, 'pro/job_new_candidacy.html')
 
     def perform_pro_collaborator_added(self):
-        # TODO
-        receivers = self.action_object.job.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
+        receivers = self.action_object.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
         self.send_notifications(receivers)
         self.send_emails('Nouveau collaborateur', receivers, 'pro/collaborator_added.html')
 
     def perform_pro_collaborator_deleted(self):
-        # TODO
-        receivers = self.action_object.job.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
+        receivers = self.action_object.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
         self.send_notifications(receivers)
         self.send_emails('Offre ajoutée', receivers, 'pro/collaborator_dele.html')
 
     def perform_pro_candidacy_new_message(self):
         # TODO
-        receivers = self.action_object.job.pro.user_set.filter(is_active=True)
+        receivers = self.action_object.pro.user_set.filter(is_active=True)
         self.send_notifications(receivers)
         self.send_emails('Nouveau message', receivers, 'pro/candidacy_new_message.html')
 

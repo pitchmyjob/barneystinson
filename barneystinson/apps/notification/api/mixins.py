@@ -26,6 +26,6 @@ class NotificationtMixin(object):
         super(NotificationtMixin, self).perform_update(serializer)
         self.send_notification(serializer.instance, self.request.user)
 
-    def perform_destroy(self, serializer):
-        super(NotificationtMixin, self).perform_destroy(serializer)
-        self.send_notification(serializer.instance, self.request.user)
+    def perform_destroy(self, instance):
+        self.send_notification(instance, self.request.user)
+        super(NotificationtMixin, self).perform_destroy(instance)
