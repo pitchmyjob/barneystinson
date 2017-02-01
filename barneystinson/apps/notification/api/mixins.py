@@ -1,6 +1,6 @@
 from django.core.exceptions import ImproperlyConfigured
 
-from .utils import NotificationHandler
+from ..utils import NotificationHandler
 
 
 class NotificationtMixin(object):
