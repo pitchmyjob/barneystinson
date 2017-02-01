@@ -1,5 +1,6 @@
 import uuid
 import datetime
+import time
 
 from .models import EventModel
 
@@ -13,7 +14,8 @@ class EventMixin(object):
             type=self.TYPE, id=id,
             payload=payload,
             uuid=str(uuid.uuid4()),
-            date=datetime.datetime.now()
+            date=datetime.datetime.now(),
+            timestamp=int(time.time() * 1000000)
         )
         self.eventmodel.event = self.EVENTS.get(event)
 
