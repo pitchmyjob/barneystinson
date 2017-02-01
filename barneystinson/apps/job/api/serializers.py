@@ -23,6 +23,7 @@ class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         exclude = ('is_active',)
+        read_only_fields = ('last_payment',)
 
 
 class JobQuestionSerializer(ValidateJobSerializer, serializers.ModelSerializer):
