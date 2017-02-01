@@ -15,7 +15,7 @@ class NotificationtMixin(object):
             notification_type = self.notification_type
         else:
             notification_type = self.map_url_to_notification_type.get(self.request.resolver_match.url_name)
-        NotificationHandler(type_name=self.notification_type, emmiter=emitter, action_object=instance).send()
+        NotificationHandler(type_name=notification_type, emmiter=emitter, action_object=instance).send()
 
     def perform_create(self, serializer):
         super(NotificationtMixin, self).perform_create(serializer)

@@ -10,7 +10,7 @@ class Notification(models.Model):
     emmiter = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='notification_sent',
                                 verbose_name=_('émmeteur'))
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='notification_received',
-                                verbose_name=_('receveur'))
+                                 verbose_name=_('receveur'))
     action_object_content_type = models.ForeignKey(ContentType, verbose_name=_('type de l\'objet lié'))
     action_object_id = models.PositiveIntegerField(_('identifiant de l\'objet lié'))
     action_object = GenericForeignKey('action_object_content_type', 'action_object_id')
