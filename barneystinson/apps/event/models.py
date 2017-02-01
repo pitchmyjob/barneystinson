@@ -10,6 +10,7 @@ class EventModel(Model):
     id = NumberAttribute(null=False)
     event = UnicodeAttribute(null=False)
     date = UTCDateTimeAttribute(null=False)
+    timestamp = NumberAttribute(null=False)
     payload = MapAttribute(null=False)
     is_read = BooleanAttribute(default=False)
 

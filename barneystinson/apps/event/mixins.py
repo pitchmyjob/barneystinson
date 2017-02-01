@@ -10,7 +10,7 @@ class EventApplicantMixin(object):
         if self.request.user.is_authenticated():
             if self.request.user.is_applicant:
                 run = True
-                applicant = self.request.user.applicant
+                applicant = self.request.user.applicant if self.event_type != "applicant" else object.applicant
         else:
             if self.event_type == "applicant":
                 run = True
@@ -20,6 +20,7 @@ class EventApplicantMixin(object):
             payload = dict(serializer.validated_data)
             if 'applicant' in payload:
                 del payload['applicant']
+                del payload['photo']
             payload['id'] = object.id
             ApplicantEvent(
                 id=applicant.id,
@@ -29,7 +30,9 @@ class EventApplicantMixin(object):
 
     def perform_update(self, serializer):
         if self.request.user.is_applicant:
-            payload = serializer.validated_data
+            payload = dict(serializer.validated_data)
+            if 'photo' in payload:
+                del payload['photo']
             payload['id'] = self.get_object().id
             ApplicantEvent(
                 id=self.request.user.applicant.id,
