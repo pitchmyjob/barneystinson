@@ -61,6 +61,8 @@ class EventApplicantMixin(object):
             payload = dict(serializer.validated_data)
             if 'applicant' in payload:
                 del payload['applicant']
+            if "photo" in payload:
+                payload['photo'] = str(serializer.instance.photo)
             payload['id'] = object.id
             ApplicantEvent(
                 id=applicant.id,
@@ -69,15 +71,18 @@ class EventApplicantMixin(object):
             ).save()
 
     def perform_update(self, serializer):
+        super(EventApplicantMixin, self).perform_update(serializer)
+
         if self.request.user.is_applicant:
             payload = dict(serializer.validated_data)
+            if "photo" in payload:
+                payload['photo'] = str(serializer.instance.photo)
             payload['id'] = self.get_object().id
             ApplicantEvent(
                 id=self.request.user.applicant.id,
                 payload=payload,
                 event="edit_" + self.event_type
             ).save()
-        super(EventApplicantMixin, self).perform_update(serializer)
 
     def perform_destroy(self, serializer):
         if self.request.user.is_applicant:
