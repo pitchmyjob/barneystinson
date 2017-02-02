@@ -10,7 +10,7 @@ from .filters import JobFilter
 from .serializers import JobSerializer, JobQuestionSerializer, JobPublishSerializer
 
 
-class JobViewSet(IsActiveDestroyMixin, EventJobMixin, ModelViewSet):
+class JobViewSet(EventJobMixin, IsActiveDestroyMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsProUser]
     serializer_class = JobSerializer
     filter_class = JobFilter
