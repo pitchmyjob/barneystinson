@@ -11,6 +11,13 @@ DATABASES = {
     }
 }
 
+RAVEN_CONFIG = {
+    'dsn': 'https://05865ad797e943bf8d98bcd2159e8c2b:e602a262b83e47f7aa4528c03e252c96@sentry.io/134978',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    # 'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
+}
+
 # AWS_STORAGE_BUCKET_NAME = '<to_define>'
 
 REST_FRAMEWORK_DOCS = {

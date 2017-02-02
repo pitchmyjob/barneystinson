@@ -22,7 +22,7 @@ DATABASES = {
     }
 }
 
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EVENT_LOG = "EventLog-dev"
 

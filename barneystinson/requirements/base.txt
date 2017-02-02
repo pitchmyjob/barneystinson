@@ -12,3 +12,4 @@ psycopg2==2.6.2
 pytz==2016.10
 Unipath==1.1
 pynamodb==2.0.3
+raven==5.32.0

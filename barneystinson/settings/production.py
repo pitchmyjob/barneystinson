@@ -5,6 +5,10 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
+INSTALLED_APPS += [
+    'raven.contrib.django.raven_compat',
+]
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -13,6 +17,10 @@ DATABASES = {
         'USER': get_env_variable('DJANGO_DB_PROD_USER'),
         'PASSWORD': get_env_variable('DJANGO_DB_PROD_PASSWORD'),
     }
+}
+
+RAVEN_CONFIG = {
+    # a configurer
 }
 
 # AWS_STORAGE_BUCKET_NAME = '<to_define>'
