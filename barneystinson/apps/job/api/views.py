@@ -12,7 +12,7 @@ from .filters import JobFilter
 from .serializers import JobSerializer, JobQuestionSerializer, JobPublishSerializer
 
 
-class JobViewSet(NotificationtMixin, IsActiveDestroyMixin, ModelViewSet):
+class JobViewSet(EventJobMixin, NotificationtMixin, IsActiveDestroyMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsProUser]
     serializer_class = JobSerializer
     map_action_to_notification_type = {
