@@ -5,6 +5,7 @@ from apps.core.api.mixins import IsActiveDestroyMixin
 from apps.notification import types
 from apps.notification.api.mixins import NotificationtMixin
 from apps.pro.api.permissions import IsProUser
+from apps.event.mixins import EventJobMixin
 
 from ..models import Job, JobQuestion
 from .filters import JobFilter

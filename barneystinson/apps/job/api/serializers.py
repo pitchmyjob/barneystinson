@@ -49,3 +49,11 @@ class JobPublishSerializer(ValidateJobSerializer, serializers.ModelSerializer):
     def update(self, instance, validated_data):
         validated_data['last_payment'] = timezone.now()
         return super(JobPublishSerializer, self).update(instance, validated_data)
+
+
+class JobEventSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Job
+        fields = '__all__'
+        depth = 1
