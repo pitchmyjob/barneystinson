@@ -47,11 +47,11 @@ class Email(object):
         if settings.DEBUG or force:
             sns = boto3.client('sns')
             sns.publish(
-                TopicArn='arn:aws:sns:eu-west-1:074761588836:sendEmail',
+                TopicArn=settings.SNS_EMAIL,
                 Message=message,
                 MessageStructure='string'
             )
         else:
             sqs = boto3.resource('sqs')
-            queue = sqs.get_queue_by_name(QueueName='v2-sqsEmail')
+            queue = sqs.get_queue_by_name(QueueName=settings.SQS_EMAIL)
             queue.send_message(MessageBody=message)

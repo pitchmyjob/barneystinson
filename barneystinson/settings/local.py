@@ -22,6 +22,9 @@ DATABASES = {
     }
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-EVENT_LOG = "dev-EventLog"
+EVENT_LOG = "EventLog-dev"
+
+SNS_EMAIL = "arn:aws:sns:eu-west-1:074761588836:sendEmail-dev"
+SQS_EMAIL = "v2-sqsCronEmail-dev"

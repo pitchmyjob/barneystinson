@@ -17,4 +17,7 @@ REST_FRAMEWORK_DOCS = {
     'HIDE_DOCS': False
 }
 
-EVENT_LOG = "dev-EventLog"
+EVENT_LOG = "EventLog-staging"
+
+SNS_EMAIL = "arn:aws:sns:eu-west-1:074761588836:sendEmail-staging"
+SQS_EMAIL = "v2-sqsCronEmail-staging"
