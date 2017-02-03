@@ -25,7 +25,7 @@ RAVEN_CONFIG = {
 
 # AWS_STORAGE_BUCKET_NAME = '<to_define>'
 
-# EMAIL_BACKEND = '<to_define>'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 REST_FRAMEWORK_DOCS = {
     'HIDE_DOCS': True
@@ -35,6 +35,6 @@ EVENT_LOG = "EventLog-production"
 
 SNS_EMAIL = "arn:aws:sns:eu-west-1:074761588836:sendEmail-production"
 
-SQS_EMAIL = "v2-sqsCronEmail-production"
+SQS_EMAIL = "v2-sqsEmail-production"
 
 AWS_STORAGE_BUCKET_NAME = 'v2-pitchmyjob-production'

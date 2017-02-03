@@ -27,4 +27,4 @@ DATABASES = {
 EVENT_LOG = "EventLog-dev"
 
 SNS_EMAIL = "arn:aws:sns:eu-west-1:074761588836:sendEmail-dev"
-SQS_EMAIL = "v2-sqsCronEmail-dev"
+SQS_EMAIL = "v2-sqsEmail-dev"
