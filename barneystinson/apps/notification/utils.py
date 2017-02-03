@@ -118,14 +118,26 @@ class NotificationHandler(object):
 
     def transform_action_object_to_context(self):
         if isinstance(self.action_object, Candidacy):
-            print('Candidacy')
-            return {}
+            return {
+                'job': {
+                    'title' : self.action_object.job.title,
+                    'company': self.action_object.job.pro.company
+                }
+            }
         elif isinstance(self.action_object, CandidacyComment):
             print('CandidacyComment')
             return {}
         elif isinstance(self.action_object, Job):
-            print('Job')
-            return {}
+            return {
+                'id': self.action_object.id,
+                'title': self.action_object.title,
+                'company': self.action_object.pro.company,
+                'logo': self.action_object.pro.logo.url,
+                'location' : {
+                    'country': self.action_object.country,
+                    'locality': self.action_object.locality
+                }
+            }
         return {}
 
     def send_emails(self, subject, receivers, template):
