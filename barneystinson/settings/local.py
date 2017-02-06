@@ -10,7 +10,10 @@ AUTH_PASSWORD_VALIDATORS = []
 INSTALLED_APPS += [
     # Thirds apps
     'django_extensions',
+    'corsheaders',
 ]
+
+MIDDLEWARE = MIDDLEWARE + ['corsheaders.middleware.CorsMiddleware']
 
 DATABASES = {
     'default': {
@@ -28,3 +31,25 @@ EVENT_LOG = "EventLog-dev"
 
 SNS_EMAIL = "arn:aws:sns:eu-west-1:074761588836:sendEmail-dev"
 SQS_EMAIL = "v2-sqsEmail-dev"
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = (
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+)
+
+CORS_ALLOW_HEADERS = (
+    'x-requested-with',
+    'content-type',
+    'accept',
+    'origin',
+    'authorization',
+    'x-csrftoken'
+)
