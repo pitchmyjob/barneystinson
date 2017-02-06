@@ -55,7 +55,7 @@ class UserRegisterApplicantSerializer(UserRegisterSerializer):
             client = boto3.client('sns')
             phone_token = validated_data.get('confirm_phone_token')
             msg = 'Saisissez le code {} pour confirmer votre inscription sur Spitch.com'.format(phone_token)
-            client.publish(Message=msg, PhoneNumber='+33666530076')
+            client.publish(Message=msg, PhoneNumber=user.phone)
         return user
 
 
