@@ -53,3 +53,5 @@ CORS_ALLOW_HEADERS = (
     'authorization',
     'x-csrftoken'
 )
+
+REGISTER_CONFIRMATION = False
