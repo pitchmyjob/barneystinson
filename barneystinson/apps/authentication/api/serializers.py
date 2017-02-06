@@ -128,3 +128,24 @@ class ForgetPasswordConfirmSerializer(serializers.ModelSerializer):
         instance.set_password(validated_data.get('password'))
         instance.save()
         return instance
+
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('old_password', 'new_password')
+
+    def validate_old_password(self, value):
+        request = self.context.get('request')
+        if not request.user.check_password(value):
+            raise serializers.ValidationError(_('L\'ancien mot de passe n\'est pas valide'))
+        return value
+
+    def update(self, instance, validated_data):
+        instance.lost_password_token = ''
+        instance.set_password(validated_data.get('new_password'))
+        instance.save()
+        return instance

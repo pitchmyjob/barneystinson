@@ -8,7 +8,8 @@ from apps.event.mixins import EventApplicantMixin
 
 from .mixins import AuthLoginMixin
 from .serializers import (UserRegisterApplicantSerializer, UserRegisterProSerializer, AutLoginSerializer,
-                          UserSerializer, ForgetPasswordRequestSerializer, ForgetPasswordConfirmSerializer)
+                          UserSerializer, ForgetPasswordRequestSerializer, ForgetPasswordConfirmSerializer,
+                          ChangePasswordSerializer)
 from ..models import User
 
 
@@ -70,3 +71,11 @@ class ForgetPasswordConfirmAPIView(generics.UpdateAPIView):
         if email and token:
             return get_object_or_404(User, email=email, lost_password_token=token)
         raise NotFound()
+
+
+class ChangePasswordAPIView(generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
+
+    def get_object(self):
+        return self.request.user
