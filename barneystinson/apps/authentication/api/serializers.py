@@ -44,17 +44,13 @@ class UserRegisterApplicantSerializer(UserRegisterSerializer):
 
 
 class UserRegisterProSerializer(UserRegisterSerializer):
-    logo = Base64ImageField(source='pro.logo', required=False, default=Pro.DEFAULT_LOGO)
     company = serializers.CharField(source='pro.company')
 
     class Meta(UserRegisterSerializer.Meta):
-        fields = UserRegisterSerializer.Meta.fields + ['logo', 'company', 'position', 'phone']
+        fields = UserRegisterSerializer.Meta.fields + ['company', 'position', 'phone']
 
     def create(self, validated_data):
-        logo = validated_data['pro'].pop('logo', None)
         pro = Pro.objects.create(company=validated_data['pro']['company'])
-        pro.logo = logo
-        pro.save()
         validated_data['pro'] = pro
         user = super(UserRegisterProSerializer, self).create(validated_data)
         user.groups.add(Group.objects.get(name='handle_pro'))
