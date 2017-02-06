@@ -71,7 +71,7 @@ class Command(BaseCommand):
                 email = admin.get('email')
                 obj = User.objects.filter(email=email).first()
                 if not obj:
-                    obj = User.objects.create_superuser(username=email, **admin)
+                    obj = User.objects.create_superuser(**admin)
                     message = '"{}" has been created with id {}'.format(email, obj.pk)
                     self.stdout.write(self.style.SUCCESS(message))
                 else:
