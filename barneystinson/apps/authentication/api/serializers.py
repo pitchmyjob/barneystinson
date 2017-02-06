@@ -1,3 +1,5 @@
+import uuid
+
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
@@ -99,3 +101,30 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'first_name', 'last_name', 'email', 'photo', 'is_pro', 'is_applicant')
         read_only_fields = ('id', 'email', 'is_pro', 'is_applicant')
+
+
+class ForgetPasswordRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email',)
+
+    def update(self, instance, validated_data):
+        instance.lost_password_token = uuid.uuid4()
+        instance.save()
+        return instance
+
+
+class ForgetPasswordConfirmSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'password', 'lost_password_token')
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'lost_password_token': {'write_only': True},
+        }
+
+    def update(self, instance, validated_data):
+        instance.lost_password_token = ''
+        instance.set_password(validated_data.get('password'))
+        instance.save()
+        return instance
