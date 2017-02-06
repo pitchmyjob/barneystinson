@@ -48,7 +48,7 @@ class UserRegisterProSerializer(UserRegisterSerializer):
     company = serializers.CharField(source='pro.company')
 
     class Meta(UserRegisterSerializer.Meta):
-        fields = UserRegisterSerializer.Meta.fields + ['logo', 'company']
+        fields = UserRegisterSerializer.Meta.fields + ['logo', 'company', 'position', 'phone']
 
     def create(self, validated_data):
         logo = validated_data['pro'].pop('logo', None)
