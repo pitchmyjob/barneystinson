@@ -1,7 +1,11 @@
 from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
 from django.core.exceptions import ImproperlyConfigured
+from django.shortcuts import get_object_or_404
+
+from ..models import User
 
 
 class AuthLoginMixin(object):
@@ -18,3 +22,19 @@ class AuthLoginMixin(object):
         if not self.login_type:
             raise ImproperlyConfigured('"%s" should include a `login_type` attribute.' % self.__class__.__name__)
         return {'login_type': self.login_type}
+
+
+class AuthRegisterConfirmMixin(object):
+    token_field = None
+
+    def get_object(self):
+        email = self.request.data.get('email')
+        token = self.request.data.get('token')
+        if email and token:
+            qs_filter = {
+                'is_active': False,
+                'email': email,
+                self.token_field: token,
+            }
+            return get_object_or_404(User, **qs_filter)
+        raise NotFound()
