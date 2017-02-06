@@ -6,10 +6,11 @@ from django.shortcuts import get_object_or_404
 from apps.core.utils import Email
 from apps.event.mixins import EventApplicantMixin
 
-from .mixins import AuthLoginMixin
+from .mixins import AuthLoginMixin, AuthRegisterConfirmMixin
 from .serializers import (UserRegisterApplicantSerializer, UserRegisterProSerializer, AutLoginSerializer,
                           UserSerializer, ForgetPasswordRequestSerializer, ForgetPasswordConfirmSerializer,
-                          ChangePasswordSerializer)
+                          ChangePasswordSerializer, UserRegisterConfirmApplicantSerializer,
+                          UserRegisterConfirmProSerializer)
 from ..models import User
 
 
@@ -79,3 +80,13 @@ class ChangePasswordAPIView(generics.UpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class AuthRegisterConfirmApplicantAPIView(AuthRegisterConfirmMixin, generics.UpdateAPIView):
+    serializer_class = UserRegisterConfirmApplicantSerializer
+    token_field = 'confirm_phone_token'
+
+
+class AuthRegisterConfirmProAPIView(AuthRegisterConfirmMixin, generics.UpdateAPIView):
+    serializer_class = UserRegisterConfirmProSerializer
+    token_field = 'confirm_email_token'
