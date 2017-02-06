@@ -1,13 +1,17 @@
 import uuid
 
+import boto3
+
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group
 from django.utils.translation import ugettext as _
 
 from apps.applicant.models import Applicant
+from apps.core.utils import Email
 from apps.pro.models import Pro
 
 from ..models import User
@@ -27,7 +31,11 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        return User.objects.create_user(username=validated_data['email'], **validated_data)
+        is_active = not settings.REGISTER_CONFIRMATION
+        token = str(uuid.uuid4())
+        validated_data['confirm_email_token'] = token
+        validated_data['confirm_phone_token'] = token[:6]
+        return User.objects.create_user(username=validated_data['email'], is_active=is_active, **validated_data)
 
 
 class UserRegisterApplicantSerializer(UserRegisterSerializer):
@@ -42,6 +50,12 @@ class UserRegisterApplicantSerializer(UserRegisterSerializer):
         user.photo = photo
         user.save()
         Applicant.objects.create(user=user)
+
+        if settings.REGISTER_CONFIRMATION:
+            client = boto3.client('sns')
+            phone_token = validated_data.get('confirm_phone_token')
+            msg = 'Saisissez le code {} pour confirmer votre inscription sur Spitch.com'.format(phone_token)
+            client.publish(Message=msg, PhoneNumber='+33666530076')
         return user
 
 
@@ -57,6 +71,14 @@ class UserRegisterProSerializer(UserRegisterSerializer):
         user = super(UserRegisterProSerializer, self).create(validated_data)
         user.groups.add(Group.objects.get(name='handle_pro'))
         user.groups.add(Group.objects.get(name='handle_collaborator'))
+
+        if settings.REGISTER_CONFIRMATION:
+            context = {
+                'name': user.get_full_name(),
+                'token': user.confirm_email_token,
+            }
+            Email(subject='Confirmation d\'inscription', to=user, context=context,
+                  template='pro/register_confirm.html').send()
         return user
 
 
@@ -109,7 +131,7 @@ class ForgetPasswordRequestSerializer(serializers.ModelSerializer):
         fields = ('email',)
 
     def update(self, instance, validated_data):
-        instance.lost_password_token = uuid.uuid4()
+        instance.lost_password_token = str(uuid.uuid4())
         instance.save()
         return instance
 
@@ -117,10 +139,9 @@ class ForgetPasswordRequestSerializer(serializers.ModelSerializer):
 class ForgetPasswordConfirmSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'password', 'lost_password_token')
+        fields = ('email', 'password',)
         extra_kwargs = {
             'password': {'write_only': True},
-            'lost_password_token': {'write_only': True},
         }
 
     def update(self, instance, validated_data):
@@ -149,3 +170,25 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.set_password(validated_data.get('new_password'))
         instance.save()
         return instance
+
+
+class UserRegisterConfirmSerializer(serializers.ModelSerializer):
+    token_field = None
+
+    class Meta:
+        model = User
+        fields = ('email',)
+
+    def update(self, instance, validated_data):
+        setattr(instance, self.token_field, '')
+        setattr(instance, 'is_active', True)
+        instance.save()
+        return instance
+
+
+class UserRegisterConfirmApplicantSerializer(UserRegisterConfirmSerializer):
+    token_field = 'confirm_phone_token'
+
+
+class UserRegisterConfirmProSerializer(UserRegisterConfirmSerializer):
+    token_field = 'confirm_email_token'
