@@ -1,10 +1,15 @@
 from rest_framework import generics, permissions
+from rest_framework.exceptions import NotFound
+
+from django.shortcuts import get_object_or_404
 
 from apps.core.utils import Email
 from apps.event.mixins import EventApplicantMixin
 
 from .mixins import AuthLoginMixin
-from .serializers import UserRegisterApplicantSerializer, UserRegisterProSerializer, AutLoginSerializer, UserSerializer
+from .serializers import (UserRegisterApplicantSerializer, UserRegisterProSerializer, AutLoginSerializer,
+                          UserSerializer, ForgetPasswordRequestSerializer, ForgetPasswordConfirmSerializer)
+from ..models import User
 
 
 class AuthRegisterApplicantAPIView(EventApplicantMixin, generics.CreateAPIView):
@@ -44,3 +49,24 @@ class AuthMeAPIView(EventApplicantMixin, generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class ForgetPasswordRequestAPIView(generics.UpdateAPIView):
+    serializer_class = ForgetPasswordRequestSerializer
+
+    def get_object(self):
+        email = self.request.data.get('email')
+        if email:
+            return get_object_or_404(User, email=email)
+        raise NotFound()
+
+
+class ForgetPasswordConfirmAPIView(generics.UpdateAPIView):
+    serializer_class = ForgetPasswordConfirmSerializer
+
+    def get_object(self):
+        email = self.request.data.get('email')
+        token = self.request.data.get('token')
+        if email and token:
+            return get_object_or_404(User, email=email, lost_password_token=token)
+        raise NotFound()

@@ -15,6 +15,7 @@ class User(AbstractUser):
     phone = models.CharField(_('numéro de téléphone'), max_length=250, default='')
     position = models.CharField(_('poste occupé'), max_length=250, default='')
     pro = models.ForeignKey('pro.Pro', blank=True, null=True, verbose_name=_('pro'))
+    lost_password_token = models.CharField(_('jeton mot de passe perdu'), max_length=36, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
