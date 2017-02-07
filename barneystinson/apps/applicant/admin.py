@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from apps.event.mixins import EventApplicantAdminMixin
 from .models import (Applicant, ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage,
                      ApplicantInterest)
 
@@ -35,7 +36,7 @@ class ApplicantInterestInlineAdmin(admin.TabularInline):
 
 
 @admin.register(Applicant)
-class ApplicantAdmin(admin.ModelAdmin):
+class ApplicantAdmin(EventApplicantAdminMixin, admin.ModelAdmin):
     fields = ('user', 'title', 'birthday', 'description', 'url', 'wanted_skills', 'wanted_jobs', 'wanted_contracts')
     readonly_fields = ('user',)
     filter_horizontal = ('wanted_contracts',)

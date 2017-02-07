@@ -4,7 +4,7 @@ from rest_framework.exceptions import NotFound
 from django.shortcuts import get_object_or_404
 
 from apps.core.utils import Email
-from apps.event.mixins import EventApplicantMixin
+from apps.event.mixins import EventApplicantViewSetMixin
 
 from .mixins import AuthLoginMixin, AuthRegisterConfirmMixin
 from .serializers import (UserRegisterApplicantSerializer, UserRegisterProSerializer, AutLoginSerializer,
@@ -14,7 +14,7 @@ from .serializers import (UserRegisterApplicantSerializer, UserRegisterProSerial
 from ..models import User
 
 
-class AuthRegisterApplicantAPIView(EventApplicantMixin, generics.CreateAPIView):
+class AuthRegisterApplicantAPIView(EventApplicantViewSetMixin, generics.CreateAPIView):
     serializer_class = UserRegisterApplicantSerializer
     event_type = "applicant"
 
@@ -44,7 +44,7 @@ class AuthLoginProAPIView(AuthLoginMixin, generics.GenericAPIView):
     login_type = 'pro'
 
 
-class AuthMeAPIView(EventApplicantMixin, generics.RetrieveUpdateAPIView):
+class AuthMeAPIView(EventApplicantViewSetMixin, generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserSerializer
     event_type = 'applicant'

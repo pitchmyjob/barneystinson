@@ -2,7 +2,7 @@ from rest_framework import generics, permissions
 from rest_framework.viewsets import ModelViewSet
 
 from apps.core.api.mixins import IsAuthenticatedMixin
-from apps.event.mixins import EventApplicantMixin
+from apps.event.mixins import EventApplicantViewSetMixin
 
 from .permissions import IsApplicantUser
 from .serializers import (ApplicantMeSerializer, ApplicantExperienceSerializer, ApplicantEducationSerializer,
@@ -10,7 +10,7 @@ from .serializers import (ApplicantMeSerializer, ApplicantExperienceSerializer, 
 from ..models import ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage, ApplicantInterest
 
 
-class ApplicantMeAPIView(EventApplicantMixin, generics.RetrieveUpdateAPIView):
+class ApplicantMeAPIView(EventApplicantViewSetMixin, generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantMeSerializer
     event_type = 'applicant'
@@ -19,7 +19,7 @@ class ApplicantMeAPIView(EventApplicantMixin, generics.RetrieveUpdateAPIView):
         return self.request.user.applicant
 
 
-class ApplicantExperienceViewSet(EventApplicantMixin, IsAuthenticatedMixin, ModelViewSet):
+class ApplicantExperienceViewSet(EventApplicantViewSetMixin, IsAuthenticatedMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantExperienceSerializer
     event_type = 'experience'
@@ -28,7 +28,7 @@ class ApplicantExperienceViewSet(EventApplicantMixin, IsAuthenticatedMixin, Mode
         return ApplicantExperience.objects.filter(applicant__user=self.request.user)
 
 
-class ApplicantEducationViewSet(EventApplicantMixin, IsAuthenticatedMixin, ModelViewSet):
+class ApplicantEducationViewSet(EventApplicantViewSetMixin, IsAuthenticatedMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantEducationSerializer
     event_type = 'education'
@@ -37,7 +37,7 @@ class ApplicantEducationViewSet(EventApplicantMixin, IsAuthenticatedMixin, Model
         return ApplicantEducation.objects.filter(applicant__user=self.request.user)
 
 
-class ApplicantSkillViewSet(EventApplicantMixin, IsAuthenticatedMixin, ModelViewSet):
+class ApplicantSkillViewSet(EventApplicantViewSetMixin, IsAuthenticatedMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantSkillSerializer
     event_type = 'skill'
@@ -46,7 +46,7 @@ class ApplicantSkillViewSet(EventApplicantMixin, IsAuthenticatedMixin, ModelView
         return ApplicantSkill.objects.filter(applicant__user=self.request.user)
 
 
-class ApplicantLanguageViewSet(EventApplicantMixin, IsAuthenticatedMixin, ModelViewSet):
+class ApplicantLanguageViewSet(EventApplicantViewSetMixin, IsAuthenticatedMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantLanguageSerializer
     event_type = 'language'
@@ -55,7 +55,7 @@ class ApplicantLanguageViewSet(EventApplicantMixin, IsAuthenticatedMixin, ModelV
         return ApplicantLanguage.objects.filter(applicant__user=self.request.user)
 
 
-class ApplicantInterestViewSet(EventApplicantMixin, IsAuthenticatedMixin, ModelViewSet):
+class ApplicantInterestViewSet(EventApplicantViewSetMixin, IsAuthenticatedMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsApplicantUser]
     serializer_class = ApplicantInterestSerializer
     event_type = 'interest'

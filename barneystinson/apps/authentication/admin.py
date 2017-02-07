@@ -2,6 +2,11 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .models import User
+from apps.event.mixins import EventAuthAdminMixin
 
 
-admin.site.register(User, UserAdmin)
+# admin.site.register(User, UserAdmin)
+
+@admin.register(User)
+class UserAdmin(EventAuthAdminMixin, UserAdmin):
+    pass

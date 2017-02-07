@@ -5,14 +5,14 @@ from apps.core.api.mixins import IsActiveDestroyMixin
 from apps.notification import types
 from apps.notification.api.mixins import NotificationtMixin
 from apps.pro.api.permissions import IsProUser
-from apps.event.mixins import EventJobMixin
+from apps.event.mixins import EventJobViewSetMixin
 
 from ..models import Job, JobQuestion
 from .filters import JobFilter
 from .serializers import JobSerializer, JobQuestionSerializer, JobPublishSerializer
 
 
-class JobViewSet(EventJobMixin, NotificationtMixin, IsActiveDestroyMixin, ModelViewSet):
+class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsProUser]
     serializer_class = JobSerializer
     map_action_to_notification_type = {

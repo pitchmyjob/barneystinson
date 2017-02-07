@@ -120,7 +120,7 @@ class NotificationHandler(object):
         if isinstance(self.action_object, Candidacy):
             return {
                 'job': {
-                    'title' : self.action_object.job.title,
+                    'title': self.action_object.job.title,
                     'company': self.action_object.job.pro.company
                 }
             }
@@ -133,7 +133,7 @@ class NotificationHandler(object):
                 'title': self.action_object.title,
                 'company': self.action_object.pro.company,
                 'logo': self.action_object.pro.logo.url,
-                'location' : {
+                'location': {
                     'country': self.action_object.country,
                     'locality': self.action_object.locality
                 }

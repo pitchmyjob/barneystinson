@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .filters import StateListFilter
 from .models import Job, JobQuestion
+from apps.event.mixins import EventJobAdminMixin
 
 
 class JobQuestionInlineAdmin(admin.TabularInline):
@@ -11,10 +12,10 @@ class JobQuestionInlineAdmin(admin.TabularInline):
 
 
 @admin.register(Job)
-class JobAdmin(admin.ModelAdmin):
+class JobAdmin(EventJobAdminMixin, admin.ModelAdmin):
     fields = ('pro', 'title', 'contract_types', 'experiences', 'study_levels', 'salary', 'skills', 'description',
               'view_counter', 'last_payment', 'request_credits', 'is_active')
-    readonly_fields = ('view_counter', 'last_payment')
+    readonly_fields = ('view_counter',)
     filter_horizontal = ('contract_types', 'experiences', 'study_levels')
     list_display = ('pro', 'title', 'is_active', 'get_state', 'last_payment')
     list_filter = (StateListFilter, 'is_active', 'contract_types', 'experiences', 'study_levels')

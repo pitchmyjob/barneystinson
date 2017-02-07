@@ -31,6 +31,7 @@ class ApplicantEvent(EventMixin):
     EVENTS = {
         'add_applicant': 'ApplicantWasAdded',
         'edit_applicant': 'ApplicantWasModified',
+        'delete_applicant': 'ApplicantWasDeleted',
         'add_experience': 'ExperienceWasAdded',
         'edit_experience': 'ExperienceWasModified',
         'delete_experience': 'ExperienceWasDeleted',
