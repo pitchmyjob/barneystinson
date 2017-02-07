@@ -11,19 +11,22 @@ class EventApplicantViewSetMixin(CoreEventApplicant):
         super(EventApplicantViewSetMixin, self).perform_create(serializer)
         if self.event_type == "applicant":
             self.applicant_id = serializer.instance.applicant.id
-        self.topush["id"] = serializer.instance.id
         self.create_dict_to_push(serializer.validated_data)
+        self.topush["id"] = serializer.instance.id
+        print(self.topush)
         self.push_event("add")
 
     def perform_update(self, serializer):
         super(EventApplicantViewSetMixin, self).perform_update(serializer)
         if self.request.user.is_applicant:
-            self.topush["id"] = serializer.instance.id
             self.create_dict_to_push(serializer.validated_data)
+            self.topush["id"] = serializer.instance.id
+            print(self.topush)
             self.push_event("edit")
 
     def perform_destroy(self, serializer):
-        self.topush['id'] = self.get_object().id
+        self.topush = {"id" : self.get_object().id}
+        print(self.topush)
         self.push_event("delete")
         super(EventApplicantViewSetMixin, self).perform_destroy(serializer)
 
@@ -46,16 +49,17 @@ class EventApplicantAdminMixin(CoreEventApplicant):
         for instance in formset.save(commit=False):
             action = "edit" if instance.id else "add"
             instance.save()
-            self.topush = {}
             self.define_event_type(instance)
             self.create_dict_to_push(model_to_dict(instance))
             self.topush["id"] = instance.id
+            print(self.topush)
             self.push_event(action)
 
         for instance in formset.deleted_objects:
             self.define_event_type(instance)
             self.topush = {'id': instance.id}
             self.push_event("delete")
+            print(self.topush)
             instance.delete()
 
     def save_model(self, request, obj, form, change):
@@ -67,6 +71,7 @@ class EventApplicantAdminMixin(CoreEventApplicant):
             self.create_dict_to_push(changed)
             self.event_type = "applicant"
             self.topush["id"] = self.applicant_id
+            print(self.topush)
             self.push_event("edit")
 
 
@@ -112,23 +117,28 @@ class EventJobAdminMixin(CoreEventJob):
         changed = {c: form.cleaned_data[c] for c in form.changed_data}
         self.job_id = obj.id
 
-        # On update une offre qui est deja active et publier => event job edit
-        if obj.last_payment and change and "last_payment" not in changed and obj.is_active:
+        # On update une offre qui est deja active et publier
+        if obj.last_payment and change and "last_payment" not in changed and obj.is_active and "is_active" not in changed:
             self.dict_to_push(changed)
             self.push_event("edit_job")
+
+        # on republie une offre qui a deja paye mais qui a ete depublier une fois
+        if obj.last_payment and change and "last_payment" not in changed and obj.is_active and "is_active" in changed:
+            self.initial_dict_to_push(obj)
+            self.push_event("add_job")
 
         # On publie un job deja existance et active => event add en lui envoyant tout job
         if obj.last_payment and change and "last_payment" in changed and obj.is_active:
             self.initial_dict_to_push(obj)
             self.push_event("add_job")
 
-        # On cree et on publie pour la premiere fois une offre => event add
+        # On cree et on publie pour la premiere fois une offre
         if not change and obj.last_payment and obj.is_active:
             self.initial_dict_to_push(obj)
             self.push_event("add_job")
 
-        # On update une offre et on lui retive is_active => event delete
-        if change and not obj.is_active:
+        # On desative une offre deja publique deja paye
+        if change and not obj.is_active and changed and "is_active" in changed:
             self.push_event("delete_job")
 
 

@@ -10,6 +10,7 @@ class CoreEventJob(object):
     topush = {}
 
     def dict_to_push(self, validated_data):
+        self.topush = {}
         for key, data in validated_data.items():
             if data is None or data == "":
                 continue
@@ -60,6 +61,7 @@ class CoreEventApplicant(object):
         ).save()
 
     def create_dict_to_push(self, datas):
+        self.topush = {}
         for key, data in datas.items():
             if key == "applicant" or data is None or data == "" or key == "password":
                 continue
