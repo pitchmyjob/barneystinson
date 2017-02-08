@@ -5,6 +5,7 @@ from django.db.models.query import QuerySet
 from apps.core.utils import Email
 from apps.candidacy.models import Candidacy, CandidacyComment
 from apps.job.models import Job
+from apps.message.models import CandidacyMessage
 
 from .models import Notification
 
@@ -32,8 +33,7 @@ class NotificationHandler(object):
         self.send_emails('Candidature refusé', receivers, 'applicant/candidacy_disapproved.html')
 
     def perform_applicant_candidacy_new_message(self):
-        # TODO
-        receivers = self.action_object.applicant.user
+        receivers = self.action_object.candidacy.job.pro.user_set.filter(is_active=True)
         self.send_notifications(receivers)
         self.send_emails('Nouveau message', receivers, 'applicant/candidacy_new_message.html')
 
@@ -81,8 +81,9 @@ class NotificationHandler(object):
         self.send_emails('Offre ajoutée', receivers, 'pro/collaborator_dele.html')
 
     def perform_pro_candidacy_new_message(self):
-        # TODO
-        receivers = self.action_object.pro.user_set.filter(is_active=True)
+        qs_receivers = self.action_object.candidacy.job.pro.user_set.filter(is_active=True)
+        receivers = list(qs_receivers.filter(~Q(pk=self.request.user.pk)))
+        receivers += [self.action_object.candidacy.applicant.user]
         self.send_notifications(receivers)
         self.send_emails('Nouveau message', receivers, 'pro/candidacy_new_message.html')
 
@@ -136,6 +137,17 @@ class NotificationHandler(object):
                 'location': {
                     'country': self.action_object.country,
                     'locality': self.action_object.locality
+                }
+            }
+        elif isinstance(self.action_object, CandidacyMessage):
+            return {
+                'id': self.action_object.id,
+                'candidacy_id': self.action_object.candidacy.id,
+                'job': self.action_object.candidacy.job.title,
+                'emmiter': {
+                    'first_name': self.action_object.emmiter.first_name,
+                    'last_name': self.action_object.emmiter.last_name,
+                    'photo': self.action_object.emmiter.photo.url,
                 }
             }
         return {}
