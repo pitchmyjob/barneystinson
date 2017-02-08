@@ -18,8 +18,9 @@ class NotificationtMixin(object):
 
     def send_notification(self, instance, emitter):
         notification_type = self.get_notification_type()
-        NotificationHandler(request=self.request, type_name=notification_type, emmiter=emitter,
-                            action_object=instance).send()
+        if notification_type:
+            NotificationHandler(request=self.request, type_name=notification_type, emmiter=emitter,
+                                action_object=instance).send()
 
     def perform_create(self, serializer):
         super(NotificationtMixin, self).perform_create(serializer)
