@@ -1,10 +1,11 @@
 from rest_framework import serializers
 
+from django.db.models import Q
 from django.utils.translation import ugettext as _
 
 from apps.authentication.api.serializers import UserSerializer
 
-from ..models import CandidacyMessage
+from ..models import CandidacyMessage, CandidacyMessageRead
 
 
 class CandidacyMessageSerializer(serializers.ModelSerializer):
@@ -24,6 +25,12 @@ class CandidacyMessageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(_('La candidature ne vous est pas liée'))
         return value
 
+    def create(self, validated_data):
+        request = self.context.get('request')
+        candidacy = validated_data.get('candidacy')
+        CandidacyMessageRead.objects.filter(Q(candidacy=candidacy) & ~Q(user=request.user)).update(is_read=False)
+        return super(CandidacyMessageSerializer, self).create(validated_data)
+
     def update(self, instance, validated_data):
-        del validated_data['candidacy']
+        del validated_data['candidacy']  # Remove candidacy from validated_data to avoid updating it
         return super(CandidacyMessageSerializer, self).update(instance, validated_data)
