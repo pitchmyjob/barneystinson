@@ -18,7 +18,7 @@ class CandidacyMessageRead(models.Model):
     candidacy = models.ForeignKey('candidacy.Candidacy', verbose_name=_('candidature'))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('utilisateur'))
     is_read = models.BooleanField(_('est lu'), default=False)
-    date = models.DateTimeField(_('date de dernière lecture'), auto_now=True)
+    date = models.DateTimeField(_('date de dernière lecture'), blank=True, null=True)
 
     class Meta:
         verbose_name = _('message lu')
