@@ -35,5 +35,8 @@ class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
         candidacy_id = self.request.GET.get('candidacy')
         if candidacy_id:
             qs_filter = {'user': self.request.user, 'candidacy_id': candidacy_id}
-            CandidacyMessageRead.objects.filter(**qs_filter).update(is_read=True, date=timezone.now())
+            candidacy_messsage_read, created = CandidacyMessageRead.objects.get_or_create(**qs_filter)
+            candidacy_messsage_read.is_read = True
+            candidacy_messsage_read.date = timezone.now()
+            candidacy_messsage_read.save()
         return response
