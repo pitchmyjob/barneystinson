@@ -1,13 +1,15 @@
 from rest_framework import permissions
+from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 
 from django.utils import timezone
 
 from apps.notification import types
 from apps.notification.api.mixins import NotificationtMixin
+from apps.pro.api.permissions import IsProUser
 
 from ..models import CandidacyMessage, CandidacyMessageRead
-from .serializers import CandidacyMessageSerializer
+from .serializers import CandidacyMessageSerializer, CandidacyMessageJobListSerializer
 
 
 class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
@@ -40,3 +42,26 @@ class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
             candidacy_messsage_read.date = timezone.now()
             candidacy_messsage_read.save()
         return response
+
+
+class CandidacyMessageJobListAPIView(ListAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsProUser]
+    serializer_class = CandidacyMessageJobListSerializer
+
+    def get_queryset(self):
+        qs_filter = {
+            'candidacy__job': self.kwargs.get('pk'),
+            'candidacy__job__pro': self.request.user.pro,
+        }
+        queryset = CandidacyMessage.objects.filter(**qs_filter).select_related('candidacy__applicant__user', 'emmiter')
+        return queryset.distinct('candidacy__id').order_by('candidacy__id', '-created')
+
+    def get_serializer_context(self):
+        context = super(CandidacyMessageJobListAPIView, self).get_serializer_context()
+        qs_filter = {
+            'candidacy__job': self.kwargs.get('pk'),
+            'candidacy__job__pro': self.request.user.pro,
+        }
+        reads = CandidacyMessageRead.objects.filter(**qs_filter)
+        context['is_reads'] = {obj.candidacy_id: (obj.is_read, obj.date) for obj in reads}
+        return context

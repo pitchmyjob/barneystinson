@@ -34,3 +34,19 @@ class CandidacyMessageSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         del validated_data['candidacy']  # Remove candidacy from validated_data to avoid updating it
         return super(CandidacyMessageSerializer, self).update(instance, validated_data)
+
+
+class CandidacyMessageJobListSerializer(serializers.ModelSerializer):
+    applicant = UserSerializer(source='candidacy.applicant.user', read_only=True)
+    emmiter = UserSerializer(read_only=True)
+    is_read = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CandidacyMessage
+        fields = ('id', 'candidacy', 'applicant', 'emmiter', 'message', 'created', 'is_read')
+
+    def get_is_read(self, obj):
+        is_read = self.context.get('is_reads').get(obj.candidacy_id)
+        if is_read:
+            return {'is_read': is_read[0], 'date': is_read[1]}
+        return {'is_read': False, 'date': None}
