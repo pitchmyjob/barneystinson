@@ -25,7 +25,7 @@ class EventApplicantViewSetMixin(CoreEventApplicant):
             self.push_event("edit")
 
     def perform_destroy(self, serializer):
-        self.topush = {"id" : self.get_object().id}
+        self.topush = {"id": self.get_object().id}
         print(self.topush)
         self.push_event("delete")
         super(EventApplicantViewSetMixin, self).perform_destroy(serializer)
@@ -118,7 +118,8 @@ class EventJobAdminMixin(CoreEventJob):
         self.job_id = obj.id
 
         # On update une offre qui est deja active et publier
-        if obj.last_payment and change and "last_payment" not in changed and obj.is_active and "is_active" not in changed:
+        if obj.last_payment and change and "last_payment" not in changed and obj.is_active and \
+           "is_active" not in changed:
             self.dict_to_push(changed)
             self.push_event("edit_job")
 
