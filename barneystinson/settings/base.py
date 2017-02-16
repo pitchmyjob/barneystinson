@@ -176,7 +176,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
+    'EXCEPTION_HANDLER': 'apps.core.api.utils.custom_exception_handler',
 }
 
 DAYS_JOB = 30
