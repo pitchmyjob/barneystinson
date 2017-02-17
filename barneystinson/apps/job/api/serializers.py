@@ -21,9 +21,9 @@ class ValidateJobSerializer(object):
 class JobSerializer(serializers.ModelSerializer):
     pro = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentProDefault())
     state = serializers.SerializerMethodField()
-    contract_types_extra = ContractTypeSerializer(source='contract_types', many=True)
-    experiences_extra = ExperienceSerializer(source='experiences', many=True)
-    study_levels_extra = StudyLevelSerializer(source='study_levels', many=True)
+    contract_types_extra = ContractTypeSerializer(source='contract_types', many=True, read_only=True)
+    experiences_extra = ExperienceSerializer(source='experiences', many=True, read_only=True)
+    study_levels_extra = StudyLevelSerializer(source='study_levels', many=True, read_only=True)
 
     class Meta:
         model = Job
