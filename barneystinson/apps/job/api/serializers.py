@@ -3,7 +3,6 @@ from rest_framework import serializers
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-from apps.data.api.serializers import ContractTypeSerializer, ExperienceSerializer, StudyLevelSerializer
 from apps.pro.api.fields import CurrentProDefault
 from apps.pro.api.serializers import ProSerializer
 
@@ -21,9 +20,6 @@ class ValidateJobSerializer(object):
 class JobSerializer(serializers.ModelSerializer):
     pro = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentProDefault())
     state = serializers.SerializerMethodField()
-    contract_types_extra = ContractTypeSerializer(source='contract_types', many=True, read_only=True)
-    experiences_extra = ExperienceSerializer(source='experiences', many=True, read_only=True)
-    study_levels_extra = StudyLevelSerializer(source='study_levels', many=True, read_only=True)
 
     class Meta:
         model = Job
