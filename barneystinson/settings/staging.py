@@ -1,6 +1,11 @@
 from .production import *  # noqa
 
 
+INSTALLED_APPS += [
+    # Thirds apps
+    'corsheaders',
+]
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -28,3 +33,25 @@ EVENT_LOG = "EventLog-staging"
 
 SNS_EMAIL = "arn:aws:sns:eu-west-1:074761588836:sendEmail-staging"
 SQS_EMAIL = "v2-sqsEmail-staging"
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = (
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+)
+
+CORS_ALLOW_HEADERS = (
+    'x-requested-with',
+    'content-type',
+    'accept',
+    'origin',
+    'authorization',
+    'x-csrftoken'
+)
