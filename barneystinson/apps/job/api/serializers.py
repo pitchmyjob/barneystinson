@@ -20,6 +20,9 @@ class ValidateJobSerializer(object):
 class JobSerializer(serializers.ModelSerializer):
     pro = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentProDefault())
     state = serializers.SerializerMethodField()
+    contract_types_extra = serializers.StringRelatedField(source='contract_types', many=True)
+    experiences_extra = serializers.StringRelatedField(source='experiences', many=True)
+    study_levels_extra = serializers.StringRelatedField(source='study_levels', many=True)
 
     class Meta:
         model = Job
