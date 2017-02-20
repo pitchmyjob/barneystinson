@@ -94,9 +94,9 @@ class AuthRegisterConfirmProAPIView(AuthRegisterConfirmMixin, generics.UpdateAPI
     token_field = 'confirm_email_token'
 
 
-class EmailExistsAPIView(APIView):
+class EmailNotExistsAPIView(APIView):
     def post(self, request):
         if 'email' in request.data:
-            if User.objects.filter(email=request.data['email']).exists():
+            if not User.objects.filter(email=request.data['email']).exists():
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)

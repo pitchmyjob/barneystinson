@@ -3,7 +3,7 @@ from django.conf.urls import url
 from .views import (AuthRegisterApplicantAPIView, AuthLoginApplicantAPIView, AuthRegisterProAPIView,
                     AuthLoginProAPIView, AuthMeAPIView, ForgetPasswordRequestAPIView,
                     ForgetPasswordConfirmAPIView, ChangePasswordAPIView,
-                    AuthRegisterConfirmApplicantAPIView, AuthRegisterConfirmProAPIView, EmailExistsAPIView)
+                    AuthRegisterConfirmApplicantAPIView, AuthRegisterConfirmProAPIView, EmailNotExistsAPIView)
 
 
 urlpatterns = [
@@ -17,5 +17,5 @@ urlpatterns = [
     url(r'^auth/forget-password-confirm', ForgetPasswordConfirmAPIView.as_view(), name='forst-password-confirm'),
     url(r'^auth/me/change-password', ChangePasswordAPIView.as_view(), name='me-change-password'),
     url(r'^auth/me', AuthMeAPIView.as_view(), name='me'),
-    url(r'^auth/email-exists', EmailExistsAPIView.as_view(), name='email-exists'),
+    url(r'^auth/email-not-exists', EmailNotExistsAPIView.as_view(), name='email-not-exists'),
 ]
