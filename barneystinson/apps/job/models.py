@@ -20,6 +20,7 @@ class Job(Localisation, TimeStampedModel, models.Model):
 
     pro = models.ForeignKey('pro.Pro', blank=True, null=True, verbose_name=_('pro'))
     title = models.CharField(_('titre de l\'offre'), max_length=250)
+    starting_date = models.CharField(_('titre de l\'offre'), max_length=250)
     contract_types = models.ManyToManyField('data.ContractType', verbose_name=_('types de contrat'))
     experiences = models.ManyToManyField('data.Experience', verbose_name=_('expériences'))
     study_levels = models.ManyToManyField('data.StudyLevel', verbose_name=_('niveaux d\'étude'))
