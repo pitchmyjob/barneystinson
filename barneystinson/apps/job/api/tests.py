@@ -26,6 +26,7 @@ class JobAPITestCase(tests.RetrieveAPITestCaseMixin,
         return {
             'title': 'Job title',
             'salary': '45000',
+            'starting_date': 'ASAP',
             'skills': ['Competence 1', 'Competence 2'],
             'description': 'Description',
             'contract_types': [contract_type.pk],
