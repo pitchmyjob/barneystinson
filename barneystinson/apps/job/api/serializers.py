@@ -1,3 +1,4 @@
+from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
 from django.utils import timezone
@@ -5,6 +6,7 @@ from django.utils.translation import ugettext as _
 
 from apps.pro.api.fields import CurrentProDefault
 from apps.pro.api.serializers import ProSerializer
+from apps.pro.models import Pro
 
 from ..models import Job, JobQuestion
 
@@ -18,11 +20,12 @@ class ValidateJobSerializer(object):
 
 
 class JobSerializer(serializers.ModelSerializer):
+    logo = Base64ImageField(source='pro.logo', default=Pro.DEFAULT_LOGO)
     pro = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentProDefault())
     state = serializers.SerializerMethodField()
-    contract_types_extra = serializers.StringRelatedField(source='contract_types', many=True)
-    experiences_extra = serializers.StringRelatedField(source='experiences', many=True)
-    study_levels_extra = serializers.StringRelatedField(source='study_levels', many=True)
+    contract_types_extra = serializers.StringRelatedField(source='contract_types', many=True, read_only=True)
+    experiences_extra = serializers.StringRelatedField(source='experiences', many=True, read_only=True)
+    study_levels_extra = serializers.StringRelatedField(source='study_levels', many=True, read_only=True)
 
     class Meta:
         model = Job
