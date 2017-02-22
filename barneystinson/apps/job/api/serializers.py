@@ -35,6 +35,31 @@ class JobSerializer(serializers.ModelSerializer):
     def get_state(self, obj):
         return obj.get_state()
 
+    # def create(self, validated_data):
+    #     print('---')
+    #     print(validated_data)
+    #     pro = validated_data.pop('pro', None)
+    #     print(pro)
+    #     if pro:
+    #         print(pro.logo)
+    #         logo = pro.get('logo')
+    #         print(logo)
+    #         if logo:
+    #             request = self.context.get('request')
+    #             request.user.pro.logo = logo
+    #             request.user.pro.save()
+    #     return super(JobSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        pro = validated_data.pop('pro', None)
+        if pro:
+            logo = pro.get('logo')
+            if logo:
+                request = self.context.get('request')
+                request.user.pro.logo = logo
+                request.user.pro.save()
+        return super(JobSerializer, self).update(instance, validated_data)
+
 
 class JobQuestionSerializer(ValidateJobSerializer, serializers.ModelSerializer):
     class Meta:
