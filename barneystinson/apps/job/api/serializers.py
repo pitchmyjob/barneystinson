@@ -19,7 +19,7 @@ class ValidateJobSerializer(object):
 
 
 class JobSerializer(serializers.ModelSerializer):
-    logo = Base64ImageField(source='pro.logo', default=Pro.DEFAULT_LOGO)
+    logo = Base64ImageField(source='pro.logo', required=False)
     state = serializers.SerializerMethodField()
     contract_types_extra = serializers.StringRelatedField(source='contract_types', many=True, read_only=True)
     experiences_extra = serializers.StringRelatedField(source='experiences', many=True, read_only=True)
