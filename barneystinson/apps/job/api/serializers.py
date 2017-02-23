@@ -4,7 +4,6 @@ from rest_framework import serializers
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-from apps.pro.api.fields import CurrentProDefault
 from apps.pro.api.serializers import ProSerializer
 from apps.pro.models import Pro
 
@@ -21,7 +20,6 @@ class ValidateJobSerializer(object):
 
 class JobSerializer(serializers.ModelSerializer):
     logo = Base64ImageField(source='pro.logo', default=Pro.DEFAULT_LOGO)
-    pro = serializers.PrimaryKeyRelatedField(read_only=True, default=CurrentProDefault())
     state = serializers.SerializerMethodField()
     contract_types_extra = serializers.StringRelatedField(source='contract_types', many=True, read_only=True)
     experiences_extra = serializers.StringRelatedField(source='experiences', many=True, read_only=True)
@@ -30,10 +28,34 @@ class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         exclude = ('is_active',)
-        read_only_fields = ('id', 'last_payment', 'request_credits', 'view_counter')
+        read_only_fields = ('id', 'pro', 'last_payment', 'request_credits', 'view_counter')
 
     def get_state(self, obj):
         return obj.get_state()
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+
+        pro = validated_data.pop('pro', None)
+        if pro:
+            logo = pro.get('logo')
+            if logo:
+                request.user.pro.logo = logo
+                request.user.pro.save()
+
+        validated_data['pro'] = request.user.pro
+        return super(JobSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+
+        pro = validated_data.pop('pro', None)
+        if pro:
+            logo = pro.get('logo')
+            if logo:
+                request.user.pro.logo = logo
+                request.user.pro.save()
+        return super(JobSerializer, self).update(instance, validated_data)
 
 
 class JobQuestionSerializer(ValidateJobSerializer, serializers.ModelSerializer):
