@@ -14,6 +14,9 @@ from .managers import JobManager
 
 
 class Job(Localisation, TimeStampedModel, models.Model):
+    STATE_PENDING = 'P'
+    STATE_VISIBLE = 'V'
+    STATE_EXPIRED = 'E'
     STATE_PENDING_LABEL = _('En attente')
     STATE_VISIBLE_LABEL = _('Visible')
     STATE_EXPIRED_LABEL = _('Expirée')
@@ -49,7 +52,15 @@ class Job(Localisation, TimeStampedModel, models.Model):
             return self.STATE_VISIBLE_LABEL
         else:
             return self.STATE_EXPIRED_LABEL
-    get_state.short_description = _('État')
+
+    def get_state_code(self):
+        date = timezone.now() - datetime.timedelta(days=settings.DAYS_JOB)
+        if self.last_payment is None:
+            return self.STATE_PENDING
+        elif self.last_payment >= date:
+            return self.STATE_VISIBLE
+        else:
+            return self.STATE_EXPIRED
 
 
 class JobQuestion(models.Model):

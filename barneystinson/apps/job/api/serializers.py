@@ -5,7 +5,6 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from apps.pro.api.serializers import ProSerializer
-from apps.pro.models import Pro
 
 from ..models import Job, JobQuestion
 
@@ -24,6 +23,7 @@ class JobSerializer(serializers.ModelSerializer):
     contract_types_extra = serializers.StringRelatedField(source='contract_types', many=True, read_only=True)
     experiences_extra = serializers.StringRelatedField(source='experiences', many=True, read_only=True)
     study_levels_extra = serializers.StringRelatedField(source='study_levels', many=True, read_only=True)
+    candidacy_count = serializers.ReadOnlyField(source='candidacy_set.count')
 
     class Meta:
         model = Job
@@ -31,7 +31,10 @@ class JobSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'pro', 'last_payment', 'request_credits', 'view_counter')
 
     def get_state(self, obj):
-        return obj.get_state()
+        return {
+            'code': obj.get_state_code(),
+            'label': obj.get_state(),
+        }
 
     def create(self, validated_data):
         request = self.context.get('request')

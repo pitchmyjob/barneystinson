@@ -1,4 +1,5 @@
 from rest_framework import decorators, permissions
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from apps.core.api.mixins import IsActiveDestroyMixin
@@ -32,6 +33,14 @@ class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin,
     def publish(self, request, pk=None):
         self.kwargs['pk'] = request.data.get('job', None)
         return self.update(request)
+
+    @decorators.list_route(methods=['get'])
+    def count(self, request, pk=None):
+        return Response({
+            'pending': Job.objects.filter(pro=request.user.pro, is_active=True).is_pending().count(),
+            'visible': Job.objects.filter(pro=request.user.pro, is_active=True).is_visible().count(),
+            'expired': Job.objects.filter(pro=request.user.pro, is_active=True).is_expired().count(),
+        })
 
 
 class JobQuestionViewSet(ModelViewSet):
