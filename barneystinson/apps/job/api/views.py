@@ -10,12 +10,14 @@ from apps.event.mixins import EventJobViewSetMixin
 
 from ..models import Job, JobQuestion
 from .filters import JobFilter
+from .pagination import JobPagination
 from .serializers import JobSerializer, JobQuestionSerializer, JobPublishSerializer
 
 
 class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsProUser]
     serializer_class = JobSerializer
+    pagination_class = JobPagination
     map_action_to_notification_type = {
         'create': types.PRO_JOB_ADDED,
         'update': types.PRO_JOB_UPDATED,
