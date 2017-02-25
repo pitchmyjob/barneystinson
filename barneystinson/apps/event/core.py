@@ -39,6 +39,27 @@ class CoreEventJob(object):
                 "company": instance.pro.company
             }
         }
+        if instance.address:
+            self.topush['address'] = instance.address
+        if instance.latitude:
+            self.topush['latitude'] = instance.latitude
+        if instance.longitude:
+            self.topush['longitude'] = instance.longitude
+        if instance.street_number:
+            self.topush['street_number'] = instance.street_number
+        if instance.route:
+            self.topush['route'] = instance.route
+        if instance.cp:
+            self.topush['cp'] = instance.cp
+        if instance.locality:
+            self.topush['locality'] = instance.locality
+        if instance.administrative_area_level_1:
+            self.topush['administrative_area_level_1'] = instance.administrative_area_level_1
+        if instance.administrative_area_level_2:
+            self.topush['administrative_area_level_2'] = instance.administrative_area_level_2
+        if instance.country:
+            self.topush['country'] = instance.country
+
 
     def push_event(self, action):
         JobEvent(
