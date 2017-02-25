@@ -13,7 +13,6 @@ class JobQuestionInlineAdmin(admin.TabularInline):
 
 @admin.register(Job)
 class JobAdmin(EventJobAdminMixin, admin.ModelAdmin):
-    
     readonly_fields = ('view_counter',)
     filter_horizontal = ('contract_types', 'experiences', 'study_levels')
     list_display = ('pro', 'title', 'is_active', 'get_state', 'last_payment')
