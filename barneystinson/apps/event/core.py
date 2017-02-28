@@ -2,7 +2,17 @@ import datetime
 
 from django.forms.models import model_to_dict
 
-from .event import ApplicantEvent, JobEvent
+from .event import ApplicantEvent, JobEvent, MatchingEvent
+
+
+class CoreMatchingEvent(object):
+
+    def push_matching(self, action):
+        MatchingEvent(
+            id=self.object_id,
+            payload={},
+            event=action
+        ).save()
 
 
 class CoreEventJob(object):

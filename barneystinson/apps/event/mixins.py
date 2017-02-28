@@ -1,8 +1,10 @@
 from django.forms.models import model_to_dict
 
-from .core import CoreEventJob, CoreEventApplicant
+from .core import CoreEventJob, CoreEventApplicant, CoreMatchingEvent
 from apps.applicant.models import (ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage,
                                    ApplicantInterest)
+
+
 
 
 class EventApplicantViewSetMixin(CoreEventApplicant):
@@ -13,7 +15,6 @@ class EventApplicantViewSetMixin(CoreEventApplicant):
             self.applicant_id = serializer.instance.applicant.id
         self.create_dict_to_push(serializer.validated_data)
         self.topush["id"] = serializer.instance.id
-        print(self.topush)
         self.push_event("add")
 
     def perform_update(self, serializer):
@@ -21,14 +22,13 @@ class EventApplicantViewSetMixin(CoreEventApplicant):
         if self.request.user.is_applicant:
             self.create_dict_to_push(serializer.validated_data)
             self.topush["id"] = serializer.instance.id
-            print(self.topush)
             self.push_event("edit")
 
     def perform_destroy(self, serializer):
         self.topush = {"id": self.get_object().id}
-        print(self.topush)
         self.push_event("delete")
         super(EventApplicantViewSetMixin, self).perform_destroy(serializer)
+
 
 
 class EventApplicantAdminMixin(CoreEventApplicant):
@@ -45,6 +45,7 @@ class EventApplicantAdminMixin(CoreEventApplicant):
         if isinstance(instance, ApplicantInterest):
             self.event_type = "interest"
 
+
     def save_formset(self, request, form, formset, change):
         for instance in formset.save(commit=False):
             action = "edit" if instance.id else "add"
@@ -52,15 +53,14 @@ class EventApplicantAdminMixin(CoreEventApplicant):
             self.define_event_type(instance)
             self.create_dict_to_push(model_to_dict(instance))
             self.topush["id"] = instance.id
-            print(self.topush)
             self.push_event(action)
 
         for instance in formset.deleted_objects:
             self.define_event_type(instance)
             self.topush = {'id': instance.id}
             self.push_event("delete")
-            print(self.topush)
             instance.delete()
+
 
     def save_model(self, request, obj, form, change):
         super(EventApplicantAdminMixin, self).save_model(request, obj, form, change)
@@ -71,7 +71,6 @@ class EventApplicantAdminMixin(CoreEventApplicant):
             self.create_dict_to_push(changed)
             self.event_type = "applicant"
             self.topush["id"] = self.applicant_id
-            print(self.topush)
             self.push_event("edit")
 
 
@@ -143,7 +142,7 @@ class EventJobAdminMixin(CoreEventJob):
             self.push_event("delete_job")
 
 
-class EventJobViewSetMixin(CoreEventJob):
+class EventJobViewSetMixin(CoreEventJob, CoreMatchingEvent):
 
     def perform_update(self, serializer):
         old_object = self.get_object()
@@ -158,6 +157,8 @@ class EventJobViewSetMixin(CoreEventJob):
             else:
                 self.initial_dict_to_push(serializer.instance)
                 self.push_event("add_job")
+                self.object_id = self.job_id
+                self.push_matching("match_job")
 
     def perform_destroy(self, serializer):
         self.job_id = self.get_object().id

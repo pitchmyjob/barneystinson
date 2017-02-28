@@ -5,6 +5,7 @@ import time
 from .models import EventModel
 
 
+
 class EventMixin(object):
     TYPE = None
     EVENTS = None
@@ -56,4 +57,12 @@ class JobEvent(EventMixin):
         'add_job': 'JobWasAdded',
         'edit_job': 'JobWasModified',
         'delete_job': 'JobWasDeleted'
+    }
+
+
+class MatchingEvent(EventMixin):
+    TYPE = 'MatchingEvent'
+    EVENTS = {
+        'match_job': 'ApplicantMatchingWasRequested',
+        'match_applicant': 'JobMatchingWasRequested'
     }
