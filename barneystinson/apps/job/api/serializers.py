@@ -47,7 +47,9 @@ class JobSerializer(serializers.ModelSerializer):
                 request.user.pro.save()
 
         validated_data['pro'] = request.user.pro
-        return super(JobSerializer, self).create(validated_data)
+        job = super(JobSerializer, self).create(validated_data)
+        JobQuestion.objects.create(job=job)  # TODO: remove this line to deal with multiple question
+        return job
 
     def update(self, instance, validated_data):
         request = self.context.get('request')
