@@ -5,7 +5,6 @@ import time
 from .models import EventModel
 
 
-
 class EventMixin(object):
     TYPE = None
     EVENTS = None

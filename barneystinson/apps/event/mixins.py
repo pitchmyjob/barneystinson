@@ -5,8 +5,6 @@ from apps.applicant.models import (ApplicantExperience, ApplicantEducation, Appl
                                    ApplicantInterest)
 
 
-
-
 class EventApplicantViewSetMixin(CoreEventApplicant):
 
     def perform_create(self, serializer):
@@ -30,7 +28,6 @@ class EventApplicantViewSetMixin(CoreEventApplicant):
         super(EventApplicantViewSetMixin, self).perform_destroy(serializer)
 
 
-
 class EventApplicantAdminMixin(CoreEventApplicant):
 
     def define_event_type(self, instance):
@@ -44,7 +41,6 @@ class EventApplicantAdminMixin(CoreEventApplicant):
             self.event_type = "language"
         if isinstance(instance, ApplicantInterest):
             self.event_type = "interest"
-
 
     def save_formset(self, request, form, formset, change):
         for instance in formset.save(commit=False):
@@ -60,7 +56,6 @@ class EventApplicantAdminMixin(CoreEventApplicant):
             self.topush = {'id': instance.id}
             self.push_event("delete")
             instance.delete()
-
 
     def save_model(self, request, obj, form, change):
         super(EventApplicantAdminMixin, self).save_model(request, obj, form, change)
