@@ -2,6 +2,9 @@ from rest_framework import decorators, permissions
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from django.db.models import Count
+
+from apps.candidacy.models import Candidacy
 from apps.core.api.mixins import IsActiveDestroyMixin
 from apps.notification import types
 from apps.notification.api.mixins import NotificationtMixin
@@ -25,6 +28,15 @@ class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin,
     }
     filter_class = JobFilter
     search_fields = ('title', 'description')
+
+    def get_serializer_context(self):
+        context = super(JobViewSet, self).get_serializer_context()
+
+        not_matching = Candidacy.objects.filter(job__pro=self.request.user.pro).exclude(status=Candidacy.MATCHING)
+        candidacies_count = Job.objects.filter(candidacy__in=not_matching).annotate(Count('candidacy')) \
+                                       .values('id', 'candidacy__count')
+        context['candidacies_count'] = {job['id']: job['candidacy__count'] for job in candidacies_count}
+        return context
 
     def get_queryset(self):
         qs = Job.objects.prefetch_related('contract_types', 'experiences', 'study_levels')
