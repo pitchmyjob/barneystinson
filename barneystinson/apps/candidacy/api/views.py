@@ -9,12 +9,13 @@ from apps.notification import types
 from apps.notification.api.mixins import NotificationtMixin
 
 from .mixins import CandidacyProMixin, CandidacyApplicantMixin, CandidacyProPermissionMixin
+from .pagination import CandidacyPagination
 from .serializers import CandidacyProCommentSerializer
 from ..models import Candidacy, CandidacyComment
 
 
 class CandidacyProListAPIView(CandidacyProMixin, generics.ListAPIView):
-    pass
+    pagination_class = CandidacyPagination
 
 
 class CandidacyProRetrieveAPIView(CandidacyProMixin, generics.RetrieveAPIView):
