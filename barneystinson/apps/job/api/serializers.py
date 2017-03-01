@@ -23,7 +23,7 @@ class JobSerializer(serializers.ModelSerializer):
     contract_types_extra = serializers.StringRelatedField(source='contract_types', many=True, read_only=True)
     experiences_extra = serializers.StringRelatedField(source='experiences', many=True, read_only=True)
     study_levels_extra = serializers.StringRelatedField(source='study_levels', many=True, read_only=True)
-    candidacy_count = serializers.ReadOnlyField(source='candidacy_set.count')
+    candidacy_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Job
@@ -35,6 +35,12 @@ class JobSerializer(serializers.ModelSerializer):
             'code': obj.get_state_code(),
             'label': obj.get_state(),
         }
+
+    def get_candidacy_count(self, obj):
+        candidacies_count = self.context.get('candidacies_count')
+        if candidacies_count is not None:
+            return candidacies_count.get(obj.id, 0)
+        return 0
 
     def create(self, validated_data):
         request = self.context.get('request')

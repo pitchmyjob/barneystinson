@@ -70,7 +70,6 @@ class CoreEventJob(object):
         if instance.country:
             self.topush['country'] = instance.country
 
-
     def push_event(self, action):
         JobEvent(
             id=self.job_id,
