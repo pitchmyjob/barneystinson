@@ -56,6 +56,21 @@ class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin,
             'expired': Job.objects.filter(pro=request.user.pro, is_active=True).is_expired().count(),
         })
 
+    @decorators.detail_route(methods=['get'], url_path='count-candidacies')
+    def count_candidacies(self, request, pk=None):
+        return Response({
+            'like': Candidacy.objects.filter(job__pro=request.user.pro, job_id=pk, job__is_active=True,
+                                             status=Candidacy.LIKE).count(),
+            'request': Candidacy.objects.filter(job__pro=request.user.pro, job_id=pk, job__is_active=True,
+                                             status=Candidacy.REQUEST).count(),
+            'video': Candidacy.objects.filter(job__pro=request.user.pro, job_id=pk, job__is_active=True,
+                                             status=Candidacy.VIDEO).count(),
+            'selected': Candidacy.objects.filter(job__pro=request.user.pro, job_id=pk, job__is_active=True,
+                                             status=Candidacy.SELECTED).count(),
+            'not_selected': Candidacy.objects.filter(job__pro=request.user.pro, job_id=pk, job__is_active=True,
+                                             status=Candidacy.NOT_SELECTED).count(),
+        })
+
 
 class JobQuestionViewSet(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsProUser]
