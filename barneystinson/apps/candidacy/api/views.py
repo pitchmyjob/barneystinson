@@ -15,6 +15,9 @@ from ..models import Candidacy, CandidacyComment
 
 
 class CandidacyProListAPIView(CandidacyProMixin, generics.ListAPIView):
+    filter_fields = ('status',)
+    search_fields = ('applicant__title', 'applicant__description',
+                     'applicant__user__first_name', 'applicant__user__last_name', 'applicant__user__email')
     pagination_class = CandidacyPagination
 
 
