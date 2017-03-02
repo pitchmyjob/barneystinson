@@ -9,12 +9,16 @@ from apps.notification import types
 from apps.notification.api.mixins import NotificationtMixin
 
 from .mixins import CandidacyProMixin, CandidacyApplicantMixin, CandidacyProPermissionMixin
+from .pagination import CandidacyPagination
 from .serializers import CandidacyProCommentSerializer
 from ..models import Candidacy, CandidacyComment
 
 
 class CandidacyProListAPIView(CandidacyProMixin, generics.ListAPIView):
-    pass
+    filter_fields = ('status',)
+    search_fields = ('applicant__title', 'applicant__description',
+                     'applicant__user__first_name', 'applicant__user__last_name', 'applicant__user__email')
+    pagination_class = CandidacyPagination
 
 
 class CandidacyProRetrieveAPIView(CandidacyProMixin, generics.RetrieveAPIView):
