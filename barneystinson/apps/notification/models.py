@@ -20,6 +20,7 @@ class Notification(models.Model):
     class Meta:
         verbose_name = _('notification')
         verbose_name_plural = _('notifications')
+        ordering = ['-created']
 
     def __str__(self):
         return '{} > {} : {}'.format(self.emmiter.pk, self.receiver.pk, self.type_name)

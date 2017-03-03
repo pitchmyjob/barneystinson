@@ -62,13 +62,13 @@ class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin,
             'like': Candidacy.objects.filter(job__pro=request.user.pro, job_id=pk, job__is_active=True,
                                              status=Candidacy.LIKE).count(),
             'request': Candidacy.objects.filter(job__pro=request.user.pro, job_id=pk, job__is_active=True,
-                                             status=Candidacy.REQUEST).count(),
+                                                status=Candidacy.REQUEST).count(),
             'video': Candidacy.objects.filter(job__pro=request.user.pro, job_id=pk, job__is_active=True,
-                                             status=Candidacy.VIDEO).count(),
+                                              status=Candidacy.VIDEO).count(),
             'selected': Candidacy.objects.filter(job__pro=request.user.pro, job_id=pk, job__is_active=True,
-                                             status=Candidacy.SELECTED).count(),
+                                                 status=Candidacy.SELECTED).count(),
             'not_selected': Candidacy.objects.filter(job__pro=request.user.pro, job_id=pk, job__is_active=True,
-                                             status=Candidacy.NOT_SELECTED).count(),
+                                                     status=Candidacy.NOT_SELECTED).count(),
         })
 
 

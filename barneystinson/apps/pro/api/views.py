@@ -1,4 +1,5 @@
 from rest_framework import generics, mixins, permissions
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.viewsets import GenericViewSet
 
 from apps.authentication.models import User
@@ -40,3 +41,9 @@ class ProCollaboratorViewSet(NotificationtMixin,
 
     def get_queryset(self):
         return User.objects.filter(pro=self.request.user.pro, is_active=True)
+
+    def perform_destroy(self, instance):
+        if self.request.user.id != instance.id:
+            super(ProCollaboratorViewSet, self).perform_destroy(instance)
+        else:
+            raise PermissionDenied(detail='You can\'t delete yourself')
