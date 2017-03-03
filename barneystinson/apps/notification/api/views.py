@@ -20,7 +20,6 @@ class NotificationViewSet(IsAuthenticatedMixin, ListModelMixin, GenericViewSet):
 
     def list(self, request, *args, **kwargs):
         response = super(NotificationViewSet, self).list(request, args, **kwargs)
-        # Notification.objects.filter(receiver=request.user, is_unread=True).update(is_unread=False)
         return response
 
     @decorators.list_route(methods=['get'], url_path='unread-count')
@@ -28,3 +27,13 @@ class NotificationViewSet(IsAuthenticatedMixin, ListModelMixin, GenericViewSet):
         return Response({
             'unread_count': Notification.objects.filter(receiver=self.request.user, is_unread=True).count(),
         })
+
+    @decorators.list_route(methods=['put', 'patch'], url_path='mark-all-as-read')
+    def mark_all_as_read(self, request, pk=None):
+        Notification.objects.filter(receiver=request.user, is_unread=True).update(is_unread=False)
+        return Response()
+
+    @decorators.detail_route(methods=['put', 'patch'], url_path='mark-as-read')
+    def mark_as_read(self, request, pk=None):
+        Notification.objects.filter(receiver=request.user, is_unread=True, id=pk).update(is_unread=False)
+        return Response()
