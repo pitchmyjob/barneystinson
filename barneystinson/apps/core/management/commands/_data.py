@@ -87,6 +87,7 @@ GROUPS = [
     {'name': 'handle_pro', 'permissions': [
         {'app_label': 'pro', 'model': 'pro', 'codenames': ['change_pro', 'delete_pro']},
     ]},
+    {'name': 'handle_dashboard', 'permissions': []},
 ]
 
 ADMINS = [

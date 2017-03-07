@@ -149,7 +149,7 @@ AWS_ACCESS_KEY_ID = get_env_variable('AWS_ACCESS_KEY_ID')
 
 AWS_SECRET_ACCESS_KEY = get_env_variable('AWS_SECRET_ACCESS_KEY')
 
-AWS_STORAGE_BUCKET_NAME = 'v2-pitchmyjob-dev'
+AWS_STORAGE_BUCKET_NAME = 'spitchapp-dev'
 
 STATICFILES_STORAGE = 'apps.core.storages.StaticStorage'
 
@@ -157,13 +157,13 @@ DEFAULT_FILE_STORAGE = 'apps.core.storages.MediaStorage'
 
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
-STATICFILES_LOCATION = 'static'
+STATICFILES_LOCATION = 'barney/static'
 
 STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
 
 STATIC_ROOT = BASE_DIR.child('static')
 
-MEDIAFILES_LOCATION = 'media'
+MEDIAFILES_LOCATION = 'barney/media'
 
 MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 
