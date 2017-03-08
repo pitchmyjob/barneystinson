@@ -98,7 +98,7 @@ class CandidacyProCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CandidacyComment
-        fields = ('id', 'candidacy', 'collaborator', 'collaborator_extra', 'message')
+        fields = ('id', 'candidacy', 'collaborator', 'collaborator_extra', 'message', 'created')
         read_only_fields = ('id',)
 
     def validate_candidacy(self, value):
