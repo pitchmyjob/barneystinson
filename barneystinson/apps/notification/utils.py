@@ -126,7 +126,6 @@ class NotificationHandler(object):
                 }
             }
         elif isinstance(self.action_object, CandidacyComment):
-            print('CandidacyComment')
             return {}
         elif isinstance(self.action_object, Job):
             return {
