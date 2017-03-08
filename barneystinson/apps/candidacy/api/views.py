@@ -9,7 +9,7 @@ from apps.notification import types
 from apps.notification.api.mixins import NotificationtMixin
 
 from .mixins import CandidacyProMixin, CandidacyApplicantMixin, CandidacyProPermissionMixin
-from .pagination import CandidacyPagination
+from .pagination import CandidacyListPagination, CandidacyCommentsPagination
 from .serializers import CandidacyProCommentSerializer
 from ..models import Candidacy, CandidacyComment
 
@@ -18,7 +18,7 @@ class CandidacyProListAPIView(CandidacyProMixin, generics.ListAPIView):
     filter_fields = ('status',)
     search_fields = ('applicant__title', 'applicant__description',
                      'applicant__user__first_name', 'applicant__user__last_name', 'applicant__user__email')
-    pagination_class = CandidacyPagination
+    pagination_class = CandidacyListPagination
 
 
 class CandidacyProRetrieveAPIView(CandidacyProMixin, generics.RetrieveAPIView):
@@ -80,8 +80,9 @@ class CandidacyProCommentViewSet(NotificationtMixin,
                                  mixins.DestroyModelMixin,
                                  GenericViewSet):
     notification_type = types.PRO_CANDIDACY_NEW_COMMENT
+    pagination_class = CandidacyCommentsPagination
     serializer_class = CandidacyProCommentSerializer
     filter_fields = ('candidacy',)
 
     def get_queryset(self):
-        return CandidacyComment.objects.filter(candidacy__job__pro=self.request.user.pro)
+        return CandidacyComment.objects.filter(candidacy__job__pro=self.request.user.pro).order_by('-created')
