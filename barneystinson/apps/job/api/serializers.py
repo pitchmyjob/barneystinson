@@ -96,3 +96,5 @@ class JobPublishSerializer(ValidateJobSerializer, serializers.ModelSerializer):
 
 class JobMatchingSerialier(serializers.Serializer):
     job = serializers.IntegerField(required=True)
+    page = serializers.IntegerField(required=False)
+    search = serializers.CharField(required=False, max_length=250)

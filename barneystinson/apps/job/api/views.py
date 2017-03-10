@@ -1,13 +1,13 @@
 import boto3
 import json
 
-from rest_framework import decorators, permissions
+from rest_framework import decorators, permissions, status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.views import APIView
 
 from django.db.models import Count
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 
 from apps.candidacy.models import Candidacy
 from apps.core.api.mixins import IsActiveDestroyMixin
@@ -79,12 +79,17 @@ class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin,
     @decorators.list_route(methods=['post'])
     def matching(self, request, pk=None):
         serializer = JobMatchingSerialier(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        lm = boto3.client("lambda")
-        response = lm.invoke(FunctionName=settings.MATCHING_LAMBDA, InvocationType='RequestResponse',Payload=json.dumps({"job": 160}))
+        if Job.objects.filter(pro=request.user.pro, pk=serializer.data.get('job')).is_visible().exists():
+            lm = boto3.client("lambda")
+            response = lm.invoke(FunctionName=settings.MATCHING_LAMBDA, InvocationType='RequestResponse',Payload=json.dumps(serializer.data))
+            results = response['Payload'].read().decode()
 
-        res = response['Payload'].read().decode()
-        return Response(json.loads(res))
+            return Response(json.loads(results))
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 class JobQuestionViewSet(ModelViewSet):
