@@ -1,8 +1,13 @@
+import boto3
+import json
+
 from rest_framework import decorators, permissions
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 
 from django.db.models import Count
+from django.conf import settings
 
 from apps.candidacy.models import Candidacy
 from apps.core.api.mixins import IsActiveDestroyMixin
@@ -14,7 +19,7 @@ from apps.event.mixins import EventJobViewSetMixin
 from ..models import Job, JobQuestion
 from .filters import JobFilter
 from .pagination import JobPagination
-from .serializers import JobSerializer, JobQuestionSerializer, JobPublishSerializer
+from .serializers import JobSerializer, JobQuestionSerializer, JobPublishSerializer, JobMatchingSerialier
 
 
 class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin, ModelViewSet):
@@ -79,3 +84,16 @@ class JobQuestionViewSet(ModelViewSet):
 
     def get_queryset(self):
         return JobQuestion.objects.filter(job__pro=self.request.user.pro, job__is_active=True)
+
+
+
+class JobMatchingApiView(APIView):
+    def post(self, request):
+        serializer = JobMatchingSerialier(data=request.data)
+        serializer.is_valid()
+        lm = boto3.client("lambda")
+        response = lm.invoke(FunctionName=settings.MATCHING_LAMBDA, InvocationType='RequestResponse', Payload=json.dumps({"job" : 160}))
+        res = response['Payload'].read().decode()
+        return Response(json.loads(res))
+
+

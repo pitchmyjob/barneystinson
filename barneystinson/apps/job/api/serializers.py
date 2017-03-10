@@ -92,3 +92,7 @@ class JobPublishSerializer(ValidateJobSerializer, serializers.ModelSerializer):
     def update(self, instance, validated_data):
         validated_data['last_payment'] = timezone.now()
         return super(JobPublishSerializer, self).update(instance, validated_data)
+
+
+class JobMatchingSerialier(serializers.Serializer):
+    job = serializers.IntegerField(required=True)
