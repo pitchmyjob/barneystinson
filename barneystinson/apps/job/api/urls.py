@@ -12,5 +12,5 @@ router.register('jobquestions', JobQuestionViewSet, base_name='jobquestion')
 
 
 urlpatterns = router.urls + [
-    url(r'^jobs/matching', JobMatchingApiView.as_view(), name='job-matching'),
+    url(r'^jobs/matching/', JobMatchingApiView.as_view(), name='job-matching'),
 ]

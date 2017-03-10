@@ -90,7 +90,8 @@ class JobQuestionViewSet(ModelViewSet):
 class JobMatchingApiView(APIView):
     def post(self, request):
         serializer = JobMatchingSerialier(data=request.data)
-        serializer.is_valid()
+        serializer.is_valid(raise_exception=True)
+
         lm = boto3.client("lambda")
         response = lm.invoke(FunctionName=settings.MATCHING_LAMBDA, InvocationType='RequestResponse', Payload=json.dumps({"job" : 160}))
         res = response['Payload'].read().decode()
