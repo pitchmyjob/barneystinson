@@ -76,6 +76,16 @@ class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin,
                                                      status=Candidacy.NOT_SELECTED).count(),
         })
 
+    @decorators.list_route(methods=['post'])
+    def matching(self, request, pk=None):
+        serializer = JobMatchingSerialier(data=request.data)
+
+        lm = boto3.client("lambda")
+        response = lm.invoke(FunctionName=settings.MATCHING_LAMBDA, InvocationType='RequestResponse',Payload=json.dumps({"job": 160}))
+
+        res = response['Payload'].read().decode()
+        return Response(json.loads(res))
+
 
 class JobQuestionViewSet(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsProUser]
@@ -84,17 +94,3 @@ class JobQuestionViewSet(ModelViewSet):
 
     def get_queryset(self):
         return JobQuestion.objects.filter(job__pro=self.request.user.pro, job__is_active=True)
-
-
-
-class JobMatchingApiView(APIView):
-    def post(self, request):
-        serializer = JobMatchingSerialier(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        lm = boto3.client("lambda")
-        response = lm.invoke(FunctionName=settings.MATCHING_LAMBDA, InvocationType='RequestResponse', Payload=json.dumps({"job" : 160}))
-        res = response['Payload'].read().decode()
-        return Response(json.loads(res))
-
-
