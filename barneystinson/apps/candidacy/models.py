@@ -31,6 +31,7 @@ class Candidacy(models.Model):
     date_request = models.DateTimeField(_('date de la demande'), blank=True, null=True)
     date_video = models.DateTimeField(_('date de la video'), blank=True, null=True)
     date_decision = models.DateTimeField(_('date de la décision'), blank=True, null=True)
+    matching_score = models.PositiveSmallIntegerField(_('score matching'), default=0)
 
     class Meta:
         verbose_name = _('Candidature')

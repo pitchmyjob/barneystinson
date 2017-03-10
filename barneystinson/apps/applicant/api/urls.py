@@ -3,7 +3,7 @@ from rest_framework.routers import SimpleRouter
 from django.conf.urls import url
 
 from .views import (ApplicantExperienceViewSet, ApplicantEducationViewSet, ApplicantSkillViewSet,
-                    ApplicantLanguageViewSet, ApplicantInterestViewSet, ApplicantMeAPIView)
+                    ApplicantLanguageViewSet, ApplicantInterestViewSet, ApplicantMeAPIView, ApplicantResumeAPIView)
 
 
 router = SimpleRouter()
@@ -14,5 +14,6 @@ router.register('applicantlanguages', ApplicantLanguageViewSet, base_name='appli
 router.register('applicantinterests', ApplicantInterestViewSet, base_name='applicantinterest')
 
 urlpatterns = router.urls + [
+    url(r'^applicant/resume/(?P<pk>\d+)', ApplicantResumeAPIView.as_view(), name='applicant-resmue'),
     url(r'^applicant/me', ApplicantMeAPIView.as_view(), name='applicant-me'),
 ]
