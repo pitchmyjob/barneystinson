@@ -3,11 +3,14 @@ from rest_framework.viewsets import ModelViewSet
 
 from apps.core.api.mixins import IsAuthenticatedMixin
 from apps.event.mixins import EventApplicantViewSetMixin
+from apps.pro.api.permissions import IsProUser
 
 from .permissions import IsApplicantUser
 from .serializers import (ApplicantMeSerializer, ApplicantExperienceSerializer, ApplicantEducationSerializer,
-                          ApplicantSkillSerializer, ApplicantLanguageSerializer, ApplicantInterestSerializer)
-from ..models import ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage, ApplicantInterest
+                          ApplicantSkillSerializer, ApplicantLanguageSerializer, ApplicantInterestSerializer,
+                          ApplicantFullSerializer)
+from ..models import (Applicant, ApplicantExperience, ApplicantEducation, ApplicantSkill, ApplicantLanguage,
+                      ApplicantInterest)
 
 
 class ApplicantMeAPIView(EventApplicantViewSetMixin, generics.RetrieveUpdateAPIView):
@@ -17,6 +20,12 @@ class ApplicantMeAPIView(EventApplicantViewSetMixin, generics.RetrieveUpdateAPIV
 
     def get_object(self):
         return self.request.user.applicant
+
+
+class ApplicantResumeAPIView(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsProUser]
+    serializer_class = ApplicantFullSerializer
+    queryset = Applicant.objects.all()
 
 
 class ApplicantExperienceViewSet(EventApplicantViewSetMixin, IsAuthenticatedMixin, ModelViewSet):
