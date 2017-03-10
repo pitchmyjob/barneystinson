@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from django.db.models import F
+from django.shortcuts import get_object_or_404
 
 from apps.job.models import Job
 from apps.notification import types
@@ -47,6 +48,16 @@ class CandidacyProRequestAPIView(NotificationtMixin, CandidacyProMixin, generics
             serializer.save()
             self.send_notification(serializer.instance, request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class CandidacyProExistsAPIView(CandidacyProMixin, generics.GenericAPIView):
+    def post(self, request):
+        job = request.data.get('job')
+        applicant = request.data.get('applicant')
+
+        candidacy = get_object_or_404(Candidacy.objects.filter(job=job, applicant=applicant))
+        serializer = self.get_serializer(candidacy)
+        return Response(serializer.data)
 
 
 class CandidacyProApproveAPIView(NotificationtMixin, CandidacyProMixin, generics.UpdateAPIView):

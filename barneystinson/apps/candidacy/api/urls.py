@@ -5,7 +5,7 @@ from django.conf.urls import url
 from .views import (CandidacyProListAPIView, CandidacyProRetrieveAPIView, CandidacyProRequestAPIView,
                     CandidacyProApproveAPIView, CandidacyProDisapproveAPIView, CandidacyApplicantListAPIView,
                     CandidacyApplicantRetrieveAPIView, CandidacyApplicantLikeAPIView,
-                    CandidacyApplicantPostulateAPIView, CandidacyProCommentViewSet)
+                    CandidacyApplicantPostulateAPIView, CandidacyProCommentViewSet, CandidacyProExistsAPIView)
 
 
 router = SimpleRouter()
@@ -18,6 +18,7 @@ urlpatterns = router.urls + [
         name='procandidacy-disapprove'),
     url(r'^pro/candidacy/(?P<pk>\d+)', CandidacyProRetrieveAPIView.as_view(), name='procandidacy-detail'),
     url(r'^pro/candidacy/request', CandidacyProRequestAPIView.as_view(), name='procandidacy-request'),
+    url(r'^pro/candidacy/exists', CandidacyProExistsAPIView.as_view(), name='procandidacy-exists'),
     url(r'^applicant/candidacies', CandidacyApplicantListAPIView.as_view(), name='applicantcandidacy-list'),
     url(r'^applicant/candidacy/(?P<pk>\d+)/like', CandidacyApplicantLikeAPIView.as_view(),
         name='applicantcandidacy-like'),

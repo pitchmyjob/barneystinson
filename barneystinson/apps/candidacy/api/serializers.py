@@ -19,11 +19,17 @@ class CandidacyProReadSerializer(serializers.ModelSerializer):
                   'date_decision')
 
 
+class CandidacyProResumeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Candidacy
+        fields = ('id', 'job', 'applicant', 'status')
+
+
 class CandidacyProRequestSerializer(ValidateJobSerializer, serializers.ModelSerializer):
     class Meta:
         model = Candidacy
-        fields = ('job', 'applicant', 'status')
-        read_only_fields = ('status',)
+        fields = ('id', 'job', 'applicant', 'status')
+        read_only_fields = ('id', 'status',)
 
     def get_validated_data(self, validated_data):
         validated_data.update({
@@ -43,7 +49,7 @@ class CandidacyProRequestSerializer(ValidateJobSerializer, serializers.ModelSeri
 class CandidacyProActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidacy
-        fields = ('job', 'applicant', 'status')
+        fields = ('id', 'job', 'applicant', 'status')
         read_only_fields = ('job', 'applicant', 'status')
 
     def update(self, instance, validated_data):

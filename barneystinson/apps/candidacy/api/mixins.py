@@ -7,7 +7,8 @@ from apps.pro.api.permissions import IsProUser
 
 from .serializers import (CandidacyProReadSerializer, CandidacyProRequestSerializer, CandidacyProApproveSerializer,
                           CandidacyProDisapproveSerializer, CandidacyApplicantReadSerializer,
-                          CandidacyApplicantLikeSerializer, CandidacyApplicantVideoSerializer)
+                          CandidacyApplicantLikeSerializer, CandidacyApplicantVideoSerializer,
+                          CandidacyProResumeSerializer)
 from ..models import Candidacy
 
 
@@ -26,6 +27,7 @@ class CandidacyProMixin(CandidacyProPermissionMixin, CandidacyMixin):
         'procandidacy-list': CandidacyProReadSerializer,
         'procandidacy-detail': CandidacyProReadSerializer,
         'procandidacy-request': CandidacyProRequestSerializer,
+        'procandidacy-exists': CandidacyProResumeSerializer,
         'procandidacy-approve': CandidacyProApproveSerializer,
         'procandidacy-disapprove': CandidacyProDisapproveSerializer,
     }
