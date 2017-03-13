@@ -9,5 +9,5 @@ class ImageField(models.ImageField):
         model_name = str(instance.__class__.__name__.lower())
         model_field_name = str(self.name)
         filename, extension = os.path.splitext(filename)
-        filename = str(uuid.uuid4()) + str(extension)
+        filename = str(uuid.uuid4()) + str(extension).lower()
         return '{}/{}/{}/{}'.format(model_name, instance.id, model_field_name, filename)
