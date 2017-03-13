@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from pynamodb.models import Model
 from pynamodb.attributes import NumberAttribute, UnicodeAttribute, UTCDateTimeAttribute, MapAttribute, BooleanAttribute
 

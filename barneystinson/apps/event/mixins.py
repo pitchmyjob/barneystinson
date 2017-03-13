@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from django.forms.models import model_to_dict
 
 from .core import CoreEventJob, CoreEventApplicant, CoreMatchingEvent

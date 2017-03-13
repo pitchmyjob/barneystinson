@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from collections import OrderedDict
 from urllib.parse import urlparse, parse_qs
 

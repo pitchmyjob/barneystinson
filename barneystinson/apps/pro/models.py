@@ -1,10 +1,15 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.behaviors import Localisation
 from apps.core.fields import ImageField
 
 
+@python_2_unicode_compatible
 class Pro(Localisation, models.Model):
     DEFAULT_LOGO = 'pro/logo/default.jpg'
 

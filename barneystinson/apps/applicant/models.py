@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.behaviors import Localisation
@@ -8,6 +12,7 @@ from apps.core.behaviors import Localisation
 from .behaviors import StartEndDate
 
 
+@python_2_unicode_compatible
 class Applicant(Localisation, models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_('utilisateur'))
     title = models.CharField(_('titre'), max_length=250, blank=True)
@@ -29,6 +34,7 @@ class Applicant(Localisation, models.Model):
         return '{} - {}'.format(self.user, self.title)
 
 
+@python_2_unicode_compatible
 class ApplicantExperience(StartEndDate, models.Model):
     applicant = models.ForeignKey('applicant.Applicant', related_name='experiences', verbose_name=_('postulant'))
     company = models.CharField(_('raison sociale'), max_length=250)
@@ -45,6 +51,7 @@ class ApplicantExperience(StartEndDate, models.Model):
         return '{} - {}'.format(self.company, self.position)
 
 
+@python_2_unicode_compatible
 class ApplicantEducation(StartEndDate, models.Model):
     applicant = models.ForeignKey('applicant.Applicant', related_name='educations', verbose_name=_('postulant'))
     school = models.CharField(_('établissement'), max_length=250)
@@ -60,6 +67,7 @@ class ApplicantEducation(StartEndDate, models.Model):
         return '{} - {}'.format(self.school, self.degree)
 
 
+@python_2_unicode_compatible
 class ApplicantSkill(models.Model):
     applicant = models.ForeignKey('applicant.Applicant', related_name='skills', verbose_name=_('postulant'))
     name = models.CharField(_('nom'), max_length=250)
@@ -73,6 +81,7 @@ class ApplicantSkill(models.Model):
         return self.name
 
 
+@python_2_unicode_compatible
 class ApplicantLanguage(models.Model):
     applicant = models.ForeignKey('applicant.Applicant', related_name='languages', verbose_name=_('postulant'))
     name = models.CharField(_('nom'), max_length=250)
@@ -86,6 +95,7 @@ class ApplicantLanguage(models.Model):
         return self.name
 
 
+@python_2_unicode_compatible
 class ApplicantInterest(models.Model):
     applicant = models.ForeignKey('applicant.Applicant', related_name='interests', verbose_name=_('postulant'))
     name = models.CharField(_('nom'), max_length=250)
