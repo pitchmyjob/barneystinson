@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from rest_framework import generics, mixins, permissions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.viewsets import GenericViewSet

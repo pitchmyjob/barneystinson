@@ -1,10 +1,15 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 
+@python_2_unicode_compatible
 class Notification(models.Model):
     type_name = models.CharField(_('type de la notification'), max_length=250)
     emmiter = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='notification_sent',

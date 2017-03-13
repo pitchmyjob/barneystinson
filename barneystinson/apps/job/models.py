@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 import datetime
 
 from model_utils.models import TimeStampedModel
@@ -6,6 +9,7 @@ from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.behaviors import Localisation
@@ -13,6 +17,7 @@ from apps.core.behaviors import Localisation
 from .managers import JobManager
 
 
+@python_2_unicode_compatible
 class Job(Localisation, TimeStampedModel, models.Model):
     STATE_PENDING = 'P'
     STATE_VISIBLE = 'V'
@@ -63,6 +68,7 @@ class Job(Localisation, TimeStampedModel, models.Model):
             return self.STATE_EXPIRED
 
 
+@python_2_unicode_compatible
 class JobQuestion(models.Model):
     job = models.ForeignKey('job.Job', related_name='questions', verbose_name=_('offre'))
     question = models.CharField(_('question'), max_length=250)

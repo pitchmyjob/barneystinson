@@ -1,5 +1,12 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from collections import OrderedDict
-from urllib.parse import urlparse, parse_qs
+
+try:
+    from urllib.parse import urlparse, parse_qs
+except ImportError:
+    from urlparse import urlparse, parse_qs
 
 from rest_framework.pagination import PageNumberPagination, CursorPagination
 from rest_framework.response import Response

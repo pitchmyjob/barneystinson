@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from rest_framework import generics, status, mixins
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet

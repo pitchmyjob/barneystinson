@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from rest_framework.mixins import ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 

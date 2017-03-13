@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 

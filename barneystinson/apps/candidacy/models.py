@@ -1,10 +1,15 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 from model_utils.models import TimeStampedModel
 
 from django.conf import settings
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 
+@python_2_unicode_compatible
 class Candidacy(models.Model):
     MATCHING = 'M'
     LIKE = 'L'
@@ -46,6 +51,7 @@ class Candidacy(models.Model):
         return self.status == self.MATCHING
 
 
+@python_2_unicode_compatible
 class CandidacyComment(TimeStampedModel, models.Model):
     candidacy = models.ForeignKey('candidacy.Candidacy', verbose_name=_('candidature'))
     collaborator = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('collaborateur'))
