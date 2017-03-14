@@ -5,8 +5,10 @@ from rest_framework import permissions
 from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 
+from django.db.models import Q
 from django.utils import timezone
 
+from apps.candidacy.models import Candidacy
 from apps.notification import types
 from apps.notification.api.mixins import NotificationtMixin
 from apps.pro.api.permissions import IsProUser
@@ -35,7 +37,8 @@ class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
             qs_filter = {'candidacy__job__pro': self.request.user.pro}
         elif self.request.user.is_applicant:
             qs_filter = {'candidacy__applicant': self.request.user.applicant}
-        return CandidacyMessage.objects.filter(**qs_filter).order_by('-created')
+        queryset = CandidacyMessage.objects.filter(~Q(candidacy__status=Candidacy.MATCHING), **qs_filter)
+        return queryset.order_by('-created')
 
     def list(self, request, *args, **kwargs):
         response = super(CandidacyMessageViewSet, self).list(request, *args, **kwargs)
@@ -62,7 +65,8 @@ class CandidacyMessageJobListAPIView(ListAPIView):
             'candidacy__job': self.kwargs.get('pk'),
             'candidacy__job__pro': self.request.user.pro,
         }
-        queryset = CandidacyMessage.objects.filter(**qs_filter).select_related('candidacy__applicant__user', 'emmiter')
+        queryset = CandidacyMessage.objects.filter(~Q(candidacy__status=Candidacy.MATCHING), **qs_filter)
+        queryset = queryset.select_related('candidacy__applicant__user', 'emmiter')
         return queryset.distinct('candidacy__id').order_by('candidacy__id', '-created')
 
     def get_serializer_context(self):
