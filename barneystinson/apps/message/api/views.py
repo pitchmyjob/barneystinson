@@ -5,13 +5,16 @@ from rest_framework import permissions
 from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 
+from django.db.models import Q
 from django.utils import timezone
 
+from apps.candidacy.models import Candidacy
 from apps.notification import types
 from apps.notification.api.mixins import NotificationtMixin
 from apps.pro.api.permissions import IsProUser
 
 from ..models import CandidacyMessage, CandidacyMessageRead
+from .pagination import CandidacyJobMessagePagination, CandidacyMessagesPagination
 from .serializers import CandidacyMessageSerializer, CandidacyMessageJobListSerializer
 
 
@@ -19,6 +22,7 @@ class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CandidacyMessageSerializer
     filter_fields = ('candidacy',)
+    pagination_class = CandidacyMessagesPagination
 
     def get_notification_type(self):
         if self.action == 'create':
@@ -33,7 +37,8 @@ class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
             qs_filter = {'candidacy__job__pro': self.request.user.pro}
         elif self.request.user.is_applicant:
             qs_filter = {'candidacy__applicant': self.request.user.applicant}
-        return CandidacyMessage.objects.filter(**qs_filter)
+        queryset = CandidacyMessage.objects.filter(~Q(candidacy__status=Candidacy.MATCHING), **qs_filter)
+        return queryset.order_by('-created')
 
     def list(self, request, *args, **kwargs):
         response = super(CandidacyMessageViewSet, self).list(request, *args, **kwargs)
@@ -50,13 +55,18 @@ class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
 class CandidacyMessageJobListAPIView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated, IsProUser]
     serializer_class = CandidacyMessageJobListSerializer
+    pagination_class = CandidacyJobMessagePagination
+    search_fields = ('candidacy__applicant__title', 'candidacy__applicant__description',
+                     'candidacy__applicant__user__first_name', 'candidacy__applicant__user__last_name',
+                     'candidacy__applicant__user__email')
 
     def get_queryset(self):
         qs_filter = {
             'candidacy__job': self.kwargs.get('pk'),
             'candidacy__job__pro': self.request.user.pro,
         }
-        queryset = CandidacyMessage.objects.filter(**qs_filter).select_related('candidacy__applicant__user', 'emmiter')
+        queryset = CandidacyMessage.objects.filter(~Q(candidacy__status=Candidacy.MATCHING), **qs_filter)
+        queryset = queryset.select_related('candidacy__applicant__user', 'emmiter')
         return queryset.distinct('candidacy__id').order_by('candidacy__id', '-created')
 
     def get_serializer_context(self):

@@ -7,6 +7,8 @@ from apps.authentication.api.serializers import UserSerializer
 from apps.authentication.models import User
 from apps.job.api.serializers import JobSerializer
 from apps.job.models import Job
+from apps.message.api.serializers import CandidacyMessageSerializer
+from apps.message.models import CandidacyMessage
 
 from ..models import Notification
 
@@ -27,6 +29,8 @@ class NotificationSerializer(serializers.ModelSerializer):
             serializer = UserSerializer(action_object)
         elif isinstance(action_object, Job):
             serializer = JobSerializer(action_object)
+        elif isinstance(action_object, CandidacyMessage):
+            serializer = CandidacyMessageSerializer(action_object)
         else:
             raise Exception('Unexpected type action_object')
         return serializer.data
