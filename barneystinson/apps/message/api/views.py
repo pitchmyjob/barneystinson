@@ -12,6 +12,7 @@ from apps.notification.api.mixins import NotificationtMixin
 from apps.pro.api.permissions import IsProUser
 
 from ..models import CandidacyMessage, CandidacyMessageRead
+from .pagination import CandidacyJobMessagePagination, CandidacyMessagesPagination
 from .serializers import CandidacyMessageSerializer, CandidacyMessageJobListSerializer
 
 
@@ -19,6 +20,7 @@ class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CandidacyMessageSerializer
     filter_fields = ('candidacy',)
+    pagination_class = CandidacyMessagesPagination
 
     def get_notification_type(self):
         if self.action == 'create':
@@ -33,7 +35,7 @@ class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
             qs_filter = {'candidacy__job__pro': self.request.user.pro}
         elif self.request.user.is_applicant:
             qs_filter = {'candidacy__applicant': self.request.user.applicant}
-        return CandidacyMessage.objects.filter(**qs_filter)
+        return CandidacyMessage.objects.filter(**qs_filter).order_by('-created')
 
     def list(self, request, *args, **kwargs):
         response = super(CandidacyMessageViewSet, self).list(request, *args, **kwargs)
@@ -50,6 +52,10 @@ class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
 class CandidacyMessageJobListAPIView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated, IsProUser]
     serializer_class = CandidacyMessageJobListSerializer
+    pagination_class = CandidacyJobMessagePagination
+    search_fields = ('candidacy__applicant__title', 'candidacy__applicant__description',
+                     'candidacy__applicant__user__first_name', 'candidacy__applicant__user__last_name',
+                     'candidacy__applicant__user__email')
 
     def get_queryset(self):
         qs_filter = {
