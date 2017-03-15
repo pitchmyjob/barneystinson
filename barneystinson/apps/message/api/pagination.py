@@ -9,4 +9,8 @@ class CandidacyJobMessagePagination(CustomPagination):
 
 
 class CandidacyMessagesPagination(CustomCursorPagination):
-    page_size = 2
+    page_size = 6
+
+
+class CandidacyMessagesNotificationPagination(CustomPagination):
+    page_size = 5

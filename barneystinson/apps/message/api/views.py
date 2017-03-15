@@ -2,7 +2,8 @@
 from __future__ import unicode_literals, absolute_import
 
 from rest_framework import permissions
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from django.db.models import Q
@@ -14,7 +15,8 @@ from apps.notification.api.mixins import NotificationtMixin
 from apps.pro.api.permissions import IsProUser
 
 from ..models import CandidacyMessage, CandidacyMessageRead
-from .pagination import CandidacyJobMessagePagination, CandidacyMessagesPagination
+from .pagination import (CandidacyJobMessagePagination, CandidacyMessagesPagination,
+                         CandidacyMessagesNotificationPagination)
 from .serializers import CandidacyMessageSerializer, CandidacyMessageJobListSerializer
 
 
@@ -23,13 +25,7 @@ class CandidacyMessageViewSet(NotificationtMixin, ModelViewSet):
     serializer_class = CandidacyMessageSerializer
     filter_fields = ('candidacy',)
     pagination_class = CandidacyMessagesPagination
-
-    def get_notification_type(self):
-        if self.action == 'create':
-            if self.request.user.is_pro:
-                return types.PRO_CANDIDACY_NEW_MESSAGE
-            elif self.request.user.is_applicant:
-                return types.APPLICANT_CANDIDACY_NEW_MESSAGE
+    notification_type = types.NEW_MESSAGE
 
     def get_queryset(self):
         qs_filter = {}
@@ -73,6 +69,40 @@ class CandidacyMessageJobListAPIView(ListAPIView):
         context = super(CandidacyMessageJobListAPIView, self).get_serializer_context()
         qs_filter = {
             'candidacy__job': self.kwargs.get('pk'),
+            'candidacy__job__pro': self.request.user.pro,
+        }
+        reads = CandidacyMessageRead.objects.filter(**qs_filter)
+        context['is_reads'] = {obj.candidacy_id: (obj.is_read, obj.date) for obj in reads}
+        return context
+
+
+class CandidacyMessageUnreadCountAPIView(GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsProUser]
+
+    def get(self, request):
+        queryset = CandidacyMessageRead.objects.filter(~Q(candidacy__status=Candidacy.MATCHING))
+        queryset = queryset.filter(candidacy__job__pro=request.user.pro, is_read=False)
+        return Response({
+            'unread_count': queryset.count(),
+        })
+
+
+class CandidacyMessageNotificationAPIView(ListAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsProUser]
+    serializer_class = CandidacyMessageJobListSerializer
+    pagination_class = CandidacyMessagesNotificationPagination
+
+    def get_queryset(self):
+        qs_filter = {
+            'candidacy__job__pro': self.request.user.pro,
+        }
+        queryset = CandidacyMessage.objects.filter(~Q(candidacy__status=Candidacy.MATCHING), **qs_filter)
+        queryset = queryset.select_related('candidacy__applicant__user', 'emmiter')
+        return queryset.distinct('candidacy__id').order_by('candidacy__id', '-created')
+
+    def get_serializer_context(self):
+        context = super(CandidacyMessageNotificationAPIView, self).get_serializer_context()
+        qs_filter = {
             'candidacy__job__pro': self.request.user.pro,
         }
         reads = CandidacyMessageRead.objects.filter(**qs_filter)

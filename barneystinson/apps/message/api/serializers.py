@@ -42,11 +42,12 @@ class CandidacyMessageSerializer(serializers.ModelSerializer):
 class CandidacyMessageJobListSerializer(serializers.ModelSerializer):
     applicant = UserSerializer(source='candidacy.applicant.user', read_only=True)
     emmiter = UserSerializer(read_only=True)
+    job = serializers.PrimaryKeyRelatedField(source='candidacy.id', read_only=True)
     is_read = serializers.SerializerMethodField()
 
     class Meta:
         model = CandidacyMessage
-        fields = ('id', 'candidacy', 'applicant', 'emmiter', 'message', 'created', 'is_read')
+        fields = ('id', 'candidacy', 'applicant', 'job', 'emmiter', 'message', 'created', 'is_read')
 
     def get_is_read(self, obj):
         is_read = self.context.get('is_reads').get(obj.candidacy_id)

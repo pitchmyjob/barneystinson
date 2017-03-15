@@ -35,11 +35,6 @@ class NotificationHandler(object):
         self.send_notifications(receivers)
         self.send_emails('Candidature refusé', receivers, 'applicant/candidacy_disapproved.html')
 
-    def perform_applicant_candidacy_new_message(self):
-        receivers = self.action_object.candidacy.job.pro.user_set.filter(is_active=True)
-        self.send_notifications(receivers)
-        self.send_emails('Nouveau message', receivers, 'applicant/candidacy_new_message.html')
-
     def perform_pro_job_added(self):
         receivers = self.action_object.pro.user_set.filter(is_active=True).filter(~Q(pk=self.request.user.pk))
         self.send_notifications(receivers)
@@ -83,12 +78,17 @@ class NotificationHandler(object):
         self.send_notifications(receivers)
         self.send_emails('Offre ajoutée', receivers, 'pro/collaborator_dele.html')
 
-    def perform_pro_candidacy_new_message(self):
-        qs_receivers = self.action_object.candidacy.job.pro.user_set.filter(is_active=True)
-        receivers = list(qs_receivers.filter(~Q(pk=self.request.user.pk)))
-        receivers += [self.action_object.candidacy.applicant.user]
-        self.send_notifications(receivers)
-        self.send_emails('Nouveau message', receivers, 'pro/candidacy_new_message.html')
+    def perform_new_message(self):
+        emmiter_is_pro = self.action_object.emmiter.is_pro
+
+        if not emmiter_is_pro:
+            receivers = self.action_object.candidacy.job.pro.user_set.filter(is_active=True)
+            self.send_emails('Nouveau message', receivers, 'applicant/candidacy_new_message.html')
+        else:
+            qs_receivers = self.action_object.candidacy.job.pro.user_set.filter(is_active=True)
+            receivers = list(qs_receivers.filter(~Q(pk=self.request.user.pk)))
+            receivers += [self.action_object.candidacy.applicant.user]
+            self.send_emails('Nouveau message', receivers, 'pro/candidacy_new_message.html')
 
     def perform_pro_candidacy_new_comment(self):
         receivers = self.action_object.candidacy.job.pro.user_set.filter(
