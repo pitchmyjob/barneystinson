@@ -42,7 +42,7 @@ class CandidacyMessageSerializer(serializers.ModelSerializer):
 class CandidacyMessageJobListSerializer(serializers.ModelSerializer):
     applicant = UserSerializer(source='candidacy.applicant.user', read_only=True)
     emmiter = UserSerializer(read_only=True)
-    job = serializers.PrimaryKeyRelatedField(source='candidacy.id', read_only=True)
+    job = serializers.PrimaryKeyRelatedField(source='candidacy.job.id', read_only=True)
     is_read = serializers.SerializerMethodField()
 
     class Meta:
