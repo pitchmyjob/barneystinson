@@ -4,7 +4,7 @@ from __future__ import unicode_literals, absolute_import
 import boto3
 import json
 
-from rest_framework import decorators, permissions, status
+from rest_framework import decorators, permissions, status, generics
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -14,15 +14,17 @@ from django.shortcuts import get_object_or_404
 
 from apps.candidacy.models import Candidacy
 from apps.core.api.mixins import IsActiveDestroyMixin
+from apps.core.utils import Email
 from apps.notification import types
 from apps.notification.api.mixins import NotificationtMixin
 from apps.pro.api.permissions import IsProUser
 from apps.event.mixins import EventJobViewSetMixin
+from apps.authentication.models import User
 
-from ..models import Job, JobQuestion
+from ..models import Job, JobQuestion, InvitationEmail
 from .filters import JobFilter
 from .pagination import JobPagination
-from .serializers import JobSerializer, JobQuestionSerializer, JobPublishSerializer, JobMatchingSerialier
+from .serializers import JobSerializer, JobQuestionSerializer, JobPublishSerializer, JobMatchingSerialier, InvitationEmailSerializer, CheckInvitationEmail
 
 
 class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin, ModelViewSet):
@@ -86,13 +88,46 @@ class JobViewSet(EventJobViewSetMixin, NotificationtMixin, IsActiveDestroyMixin,
 
         if Job.objects.filter(pro=request.user.pro, pk=serializer.data.get('job')).is_visible().exists():
             lm = boto3.client("lambda")
-            response = lm.invoke(FunctionName=settings.MATCHING_LAMBDA, InvocationType='RequestResponse',Payload=json.dumps(serializer.data))
+            response = lm.invoke(
+                FunctionName=settings.MATCHING_LAMBDA,
+                InvocationType='RequestResponse',
+                Payload=json.dumps(serializer.data)
+            )
             results = response['Payload'].read().decode()
 
             return Response(json.loads(results))
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+
+    @decorators.detail_route(methods=['get', 'post'])
+    def invitation(self, request, pk):
+        if Job.objects.filter(pk=pk, pro=request.user.pro).exists():
+            if request.method == "POST":
+                serializer = CheckInvitationEmail(data=request.data)
+                serializer.is_valid(raise_exception=True)
+
+                for email in serializer.data.get('emails'):
+                    inv, inv_created = InvitationEmail.objects.get_or_create(job_id=pk, email=email)
+                    if User.objects.filter(email=email).exists():
+                        user = User.objects.get(email=email)
+                        if user.is_applicant:
+                            obj, created = Candidacy.objects.update_or_create(
+                                job_id=pk,
+                                applicant=user.applicant,
+                                defaults={'status' : "R"}
+                            )
+                    else:
+                        if inv_created:
+                            context = {'email': email}
+                            Email(subject='Invitation à passer entretien', to=email, context=context,
+                                  template='applicant/requested.html').send()
+
+
+            serializer = InvitationEmailSerializer(InvitationEmail.objects.filter(job=pk), many=True)
+            return Response(serializer.data)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class JobQuestionViewSet(ModelViewSet):

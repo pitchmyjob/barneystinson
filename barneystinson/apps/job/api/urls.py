@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, absolute_import
 
 from rest_framework.routers import SimpleRouter
+from django.conf.urls import url
 
 from .views import JobViewSet, JobQuestionViewSet
 

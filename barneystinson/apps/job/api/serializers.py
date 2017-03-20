@@ -8,8 +8,9 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from apps.pro.api.serializers import ProSerializer
+from apps.authentication.models import User
 
-from ..models import Job, JobQuestion
+from ..models import Job, JobQuestion, InvitationEmail
 
 
 class ValidateJobSerializer(object):
@@ -101,3 +102,13 @@ class JobMatchingSerialier(serializers.Serializer):
     job = serializers.IntegerField(required=True)
     page = serializers.IntegerField(required=False)
     search = serializers.CharField(required=False, max_length=250)
+
+
+class InvitationEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InvitationEmail
+        fields = ('id', 'email', 'created')
+
+
+class CheckInvitationEmail(serializers.Serializer):
+    emails = serializers.ListField(child=serializers.EmailField())

@@ -81,3 +81,12 @@ class JobQuestion(models.Model):
 
     def __str__(self):
         return self.question
+
+
+@python_2_unicode_compatible
+class InvitationEmail(TimeStampedModel, models.Model):
+    job = models.ForeignKey('job.Job', related_name='invitations', verbose_name=_('offre'))
+    email = models.EmailField(_('email'), max_length=250)
+
+    def __str__(self):
+        return self.email
