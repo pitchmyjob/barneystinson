@@ -75,7 +75,8 @@ class CandidacyApplicantReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Candidacy
-        fields = ('id', 'job', 'status', 'date_matching', 'date_like', 'date_request', 'date_video', 'date_decision')
+        fields = ('id', 'job', 'status', 'date_matching', 'date_like', 'date_request', 'date_video', 'date_decision',
+                  'matching_score')
 
 
 class CandidacyApplicantActionSerializer(CandidacyProActionSerializer):

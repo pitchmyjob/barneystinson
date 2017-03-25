@@ -81,6 +81,9 @@ class JobQuestionSerializer(ValidateJobSerializer, serializers.ModelSerializer):
 
 class JobFullSerializer(serializers.ModelSerializer):
     pro = ProSerializer()
+    contract_types_extra = serializers.StringRelatedField(source='contract_types', many=True, read_only=True)
+    experiences_extra = serializers.StringRelatedField(source='experiences', many=True, read_only=True)
+    study_levels_extra = serializers.StringRelatedField(source='study_levels', many=True, read_only=True)
 
     class Meta:
         model = Job

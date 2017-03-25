@@ -72,7 +72,7 @@ class CandidacyProDisapproveAPIView(NotificationtMixin, CandidacyProMixin, gener
 
 
 class CandidacyApplicantListAPIView(CandidacyApplicantMixin, generics.ListAPIView):
-    pass
+    filter_fields = ('status',)
 
 
 class CandidacyApplicantRetrieveAPIView(CandidacyApplicantMixin, generics.RetrieveAPIView):
